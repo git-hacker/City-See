@@ -91,7 +91,7 @@ class MapIndex extends Component{
   render(){
     return <View style={StyleSheet.absoluteFill}>
       <View>
-        <SearchBar placeholder='对你附近的地名进行搜索' placeholderTextColor='#999' onSubmit={val => this.onSubmit(val)} />
+        <SearchBar clearTextOnFocus={true} placeholder='对你附近的地名进行搜索' placeholderTextColor='#999' onSubmit={val => this.onSubmit(val)} />
       </View>
       <MapView
         rotateEnabled={true}
