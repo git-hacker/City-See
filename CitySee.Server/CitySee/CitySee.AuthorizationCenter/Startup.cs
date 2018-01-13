@@ -107,6 +107,7 @@ namespace CitySee.AuthorizationCenter
             citySeeContext = new CitySeeContextImpl(services);
             citySeeContext.PluginConfigStorage = new DefaultPluginConfigStorage();
             citySeeContext.PluginFactory = new DefaultPluginFactory();
+            citySeeContext.ConnectionString = configuration["Data:DefaultConnection:ConnectionString"];
 
             var environment = services.FirstOrDefault(x => x.ServiceType == typeof(IHostingEnvironment))?.ImplementationInstance;
             var apppart = services.FirstOrDefault(x => x.ServiceType == typeof(ApplicationPartManager))?.ImplementationInstance;

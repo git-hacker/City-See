@@ -23,6 +23,8 @@ namespace CitySee.Core
 
         public CitySeeConfig Config { get; protected set; }
 
+        public string ConnectionString { get; set; }
+
         public CitySeeContext(IServiceCollection serviceContainer)
         {
             Current = this;
@@ -38,6 +40,6 @@ namespace CitySee.Core
         {
             return true;
         }
-        
+
     }
 }
