@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { StyleSheet} from 'react-native';
 
 const styles = StyleSheet.create({
-    xyhLayer:{
+    tarBar:{
         left:0,
         right:0,
         top:0,

@@ -12,10 +12,11 @@ import createSagaMiddleware from 'redux-saga';
 import ignoreSubspaceMiddleware from './ignoreSubspaceMiddleware'
 import {createStore} from 'redux-dynamic-reducer'
 import rootReducer from './reducers';
-import LoginPage from './login/login';
+// import LoginPage from './login/login';
+import Toolbar from './components/TopToolbar'
 import {composeWithDevTools} from 'redux-devtools-extension';
 import runSaga from './saga'
-
+import HomePage from './pages/indexList/indexPage'
 
 const history = createHistory();
 
@@ -130,16 +131,16 @@ class IndexPage extends Component {
     for (let i = 0; i < 100; i++) {
       td.push(i)
     }
-    console.log(ConnectedRouter)
+    console.log('ConnectedRouter')
     return (
       <Provider store={store}>
 
         <ConnectedRouter history={history}>
           <Layer>
-            <Route exact path='/' component={LoginPage} />
+            <Route exact path='/' component={Toolbar} />
+            {/* <View><Text>sjfasdjf</Text></View> */}
           </Layer>
         </ConnectedRouter>
-
       </Provider >
       // <View><Text>sjfasdjf</Text></View>
     )
