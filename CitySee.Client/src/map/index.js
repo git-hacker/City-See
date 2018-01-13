@@ -36,7 +36,7 @@ const styles = StyleSheet.create(
   }
 )
 
-class IndexPage extends Component{
+class MapIndex extends Component{
 
   state={
     index: 0
@@ -145,4 +145,4 @@ class IndexPage extends Component{
   }
 }
 
-export default IndexPage;
+export default MapIndex;

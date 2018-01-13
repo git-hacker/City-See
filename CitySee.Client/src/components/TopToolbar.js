@@ -6,6 +6,7 @@ import { connect } from 'react-redux'
 import { replace } from 'react-router-redux';
 // import signals from 'signals'
 import LayerStyles from './LayerStyle';
+// import MapIndex from '../map'
 
 let sbHeight = StatusBar.currentHeight;
 if (Platform.OS === 'android' && (Platform.Version * 1) <= 20) {
@@ -48,7 +49,8 @@ class TopToolbar extends Component {
                         iconStyle={{width:20,height:20}}
                         icon={require('../images/sy-20x20.png')} 
                         selectedIcon={require('../images/sy2-20x20.png')}
-                        selected={this.state.selectedTab === 'auth'} onPress={() => this.changeTab('auth')}>
+                        selected={this.state.selectedTab === 'map'} onPress={() => this.changeTab('auth')}>
+                        {/* <MapIndex actived={this.state.selectedTab === 'map'} match={this.props.match}/> */}
                     </TabBar.Item>
                     <TabBar.Item
                         iconStyle={{width:20,height:20}}
@@ -64,7 +66,7 @@ class TopToolbar extends Component {
                     </TabBar.Item>
                     <TabBar.Item title="我"
                         iconStyle={{width:20,height:20}}
-                        icon={require('../images/sy-20x20.png')} 
+                        icon={require('../images/sy-20x20.png')}
                         selectedIcon={require('../images/sy2-20x20.png')}
                         selected={this.state.selectedTab === 'my'} onPress={() => this.changeTab('my')}>
                     </TabBar.Item>
