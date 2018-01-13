@@ -1,3 +1,7 @@
 ﻿{
-
+  "Data": {
+    "DefaultConnection": {
+      "ConnectionString": "Server=localhost;database=cityseedb;uid=root;pwd=root;"
+    }
+  }
 }

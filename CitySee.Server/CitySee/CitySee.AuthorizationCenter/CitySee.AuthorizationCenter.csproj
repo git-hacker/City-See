@@ -35,7 +35,6 @@
 
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
     <Folder Include="Dto\" />
     <Folder Include="Manangers\" />
     <Folder Include="Stores\" />
