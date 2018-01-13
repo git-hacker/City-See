@@ -13,7 +13,7 @@ namespace ImageServer
 
         public string Description => "Image Upload Server";
 
-        public int Order => throw new NotImplementedException();
+        public int Order => 0;
 
         public Task<ResponseMessage> Init(CitySeeContext context)
         {

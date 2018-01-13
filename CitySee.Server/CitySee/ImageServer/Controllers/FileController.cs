@@ -17,6 +17,13 @@ namespace ImageServer
             _config = config;
         }
 
+        [HttpGet]
+        public async Task<ResponseMessage> Test()
+        {
+            return new ResponseMessage();
+        }
+
+
         [HttpPost("{objectId}")]
         public async Task<ResponseMessage<string>> Upload([FromRoute]string objectId)
         {
