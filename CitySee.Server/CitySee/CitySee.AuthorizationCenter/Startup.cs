@@ -1,4 +1,6 @@
-﻿using CitySee.AuthorizationCenter.Model;
+﻿using AspNet.Security.OAuth.Validation;
+using AutoMapper;
+using CitySee.AuthorizationCenter.Model;
 using CitySee.Core;
 using CitySee.Core.Plugin;
 using Microsoft.AspNetCore.Builder;
@@ -10,6 +12,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NLog.Extensions.Logging;
+using OpenIddict.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -42,6 +45,7 @@ namespace CitySee.AuthorizationCenter
             services.AddDbContext<CitySeeDbContext>(options =>
             {
                 options.UseMySql(configuration["Data:DefaultConnection:ConnectionString"]);
+                options.UseOpenIddict();
             });
 
             services.AddIdentity<IdentityUser, IdentityRole>(options =>
@@ -54,17 +58,7 @@ namespace CitySee.AuthorizationCenter
 
             }).AddEntityFrameworkStores<CitySeeDbContext>().AddDefaultTokenProviders();
 
-            services.AddAuthentication()
-                .AddJwtBearer(options =>
-                {
-                    options.Configuration = new Microsoft.IdentityModel.Protocols.OpenIdConnect.OpenIdConnectConfiguration()
-                    {
-
-                    };
-                    options.TokenValidationParameters.ValidateAudience = false;
-                    options.TokenValidationParameters.ValidateIssuer = false;
-                });
-
+            services.AddAuthentication().AddOAuthValidation();
 
             // Register the OpenIddict services.
             services.AddOpenIddict(options =>
@@ -75,9 +69,7 @@ namespace CitySee.AuthorizationCenter
                 // Enable the authorization, logout, token and userinfo endpoints.
                 options.EnableAuthorizationEndpoint("/connect/authorize")
                        .EnableLogoutEndpoint("/connect/logout")
-                       .EnableTokenEndpoint("/connect/token")
-                       .EnableUserinfoEndpoint("/api/userinfo")
-                       .EnableIntrospectionEndpoint("/connect/introspect");
+                       .EnableTokenEndpoint("/connect/token");
                 // Note: the Mvc.Client sample only uses the code flow and the password flow, but you
                 // can enable the other flows if you need to support implicit or client credentials.
                 options.AllowAuthorizationCodeFlow()
@@ -97,12 +89,11 @@ namespace CitySee.AuthorizationCenter
                 // During development, you can disable the HTTPS requirement.
                 options.DisableHttpsRequirement();
                 // Note: to use JWT access tokens instead of the default
-                // encrypted format, the following lines are required:
-                options.SetAccessTokenLifetime(TimeSpan.FromSeconds(3600));
-                options.UseJsonWebTokens();
+                //// encrypted format, the following lines are required:
+                //options.SetAccessTokenLifetime(TimeSpan.FromSeconds(7200));
+                //options.UseJsonWebTokens();
                 options.AddEphemeralSigningKey();
             });
-
 
             citySeeContext = new CitySeeContextImpl(services);
             citySeeContext.PluginConfigStorage = new DefaultPluginConfigStorage();
@@ -121,23 +112,19 @@ namespace CitySee.AuthorizationCenter
                 });
             }
             bool InitIsOk = citySeeContext.Init().Result;
-
-
             services.AddUserDefined();
+            
+            services.AddAutoMapper();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             loggerFactory.AddDebug();
-
-
             if (env.IsDevelopment())
             {
                 //开发环境下，日志文件输出到控制台（在VS中的输出中查看）
                 loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-
-
                 app.UseDeveloperExceptionPage();
             }
             else
@@ -145,11 +132,33 @@ namespace CitySee.AuthorizationCenter
                 //非开发环境下，日志采用NLog输出到指定文件中
                 loggerFactory.AddNLog();
             }
-
+            app.UseAuthentication();
             app.UseMvc();
+            app.UseCors(options =>
+            {
+                options.AllowAnyHeader();
+                options.AllowAnyMethod();
+                options.AllowAnyOrigin();
+                options.AllowCredentials();
+            });
+            app.Use(async (context, next) =>
+            {
+                if (context.Request.Headers.ContainsKey("X-Forwarded-Proto"))
+                {
+                    //如果存在SLB，且包含原始请求协议，将请求协议重写为原始协议
+                    string proto = context.Request.Headers["X-Forwarded-Proto"].FirstOrDefault();
+                    if (!String.IsNullOrEmpty(proto))
+                    {
+                        context.Request.Scheme = proto;
+                    }
+                }
+                await next();
+            });
+            app.UseStaticFiles();
+
+            app.UseMvcWithDefaultRoute();
 
             citySeeContext.Provider = app.ApplicationServices;
-
             InitializeAsync(app.ApplicationServices, CancellationToken.None).GetAwaiter().GetResult();
         }
 
@@ -160,9 +169,37 @@ namespace CitySee.AuthorizationCenter
                 bool StartIsOk = citySeeContext.Start().Result;
 
                 var context = scope.ServiceProvider.GetRequiredService<CitySeeDbContext>();
-                await context.Database.EnsureCreatedAsync();
+                //await context.Database.EnsureCreatedAsync();
 
-                
+                var applicationmanager = scope.ServiceProvider.GetRequiredService<OpenIddict.Core.OpenIddictApplicationManager<OpenIddictApplication>>();
+                var usermanager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
+
+                if (await applicationmanager.FindByClientIdAsync("citysee", cancellationToken) == null)
+                {
+                    var application = new OpenIddictApplication
+                    {
+                        ClientId = "citysee",
+                        Type = "confidential",
+                        DisplayName = "City_See",
+                        PostLogoutRedirectUris = "http://localhost:5001",
+                        RedirectUris = "http://localhost:5001/callback"
+                    };
+                    await applicationmanager.CreateAsync(application, "123456", cancellationToken);
+                }
+                if (await usermanager.FindByIdAsync("admin") == null)
+                {
+                    var user = new IdentityUser
+                    {
+                        Id = "admin",
+                        PhoneNumber = "13888888888",
+                        UserName = "admin",
+                        Email = "chenrongku@163.com"
+                    };
+                    await usermanager.CreateAsync(user, "123456");
+                }
+
+
+
             }
 
         }

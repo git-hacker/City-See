@@ -3,15 +3,15 @@ using System;
 using CitySee.Core;
 using System.Threading.Tasks;
 
-namespace ImageServer
+namespace BuildingComment
 {
-    public class ImageServer : IPlugin
+    public class BuildingComment : IPlugin
     {
-        public string PluginID => "5119eee1-b567-4d2b-975a-d1f817b8e574";
+        public string PluginID => "0b3dfdec-f9d4-4a00-8595-1cfb875b79c4";
 
-        public string PluginName => "Image Upload";
+        public string PluginName => "building comment";
 
-        public string Description => "Image Upload Server";
+        public string Description => "building comment server";
 
         public int Order => 0;
 
