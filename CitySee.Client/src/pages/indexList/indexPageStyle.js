@@ -3,8 +3,8 @@ import { StyleSheet} from 'react-native';
 
 export const IndexPageStyles = StyleSheet.create({
     content:{
-      flexDirection: 'column',
-      flex:1
+      // flexDirection: 'column'
+      // flex:1
     },
     tarbar: {
       justifyContent: 'flex-end',
@@ -14,6 +14,7 @@ export const IndexPageStyles = StyleSheet.create({
       flexDirection: 'row',
       overflow:'scroll',
       width: '100%',
+      height: 100
     }
 
 })

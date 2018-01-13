@@ -1,6 +1,6 @@
 import React from 'react';
 import {StyleSheet, Text, TouchableHighlight, TextInput} from "react-native";
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
+// import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import {InputItem, Toast, List, Checkbox, TextareaItem, Modal} from 'antd-mobile';
 import DatePickerItem from '../components/DatePickerItem'
 import Picker from '../components/Picker'
@@ -19,7 +19,9 @@ const showError = (error) => {
 }
 
 function ErrorIcon(props) {
-  return <TouchableHighlight underlayColor='rgb(250,250,250)' style={styles.icon} onPress={() => showError(props.error)}><MaterialIcons size={24} color='red' name='error-outline' /></TouchableHighlight>
+  return <TouchableHighlight underlayColor='rgb(250,250,250)' style={styles.icon} onPress={() => showError(props.error)}>
+  {/* <MaterialIcons size={24} color='red' name='error-outline' /> */}
+  </TouchableHighlight>
 }
 
 // const errorIcon = (error)=>{
