@@ -4,13 +4,13 @@ using System;
 
 namespace CitySee.AuthorizationCenter
 {
-    class Program
+    public class Program
     {
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
             var host = WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
-                .UseUrls($"http://*:6000")
+                .UseUrls($"http://*:6008")
                 .Build();
             host.Run();
         }

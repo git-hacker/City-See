@@ -20,6 +20,7 @@ using Microsoft.Extensions.Options;
 using OpenIddict.Core;
 using OpenIddict.Models;
 using CitySee.AuthorizationCenter.Helpers;
+using System.Security.Claims;
 
 namespace Mvc.Server
 {
@@ -43,7 +44,39 @@ namespace Mvc.Server
         }
 
         #region Authorization code, implicit and implicit flows
-       
+        [Authorize, HttpGet("~/connect/authorize")]
+        public async Task<IActionResult> Authorize(OpenIdConnectRequest request)
+        {
+            Debug.Assert(request.IsAuthorizationRequest(),
+                "The OpenIddict binder for ASP.NET Core MVC is not registered. " +
+                "Make sure services.AddOpenIddict().AddMvcBinders() is correctly called.");
+
+            // Retrieve the application details from the database.
+            var application = await _applicationManager.FindByClientIdAsync(request.ClientId, HttpContext.RequestAborted);
+            if (application == null)
+            {
+                return new JsonResult(new
+                {
+                    code = OpenIdConnectConstants.Errors.InvalidClient,
+                    message = "Details concerning the calling client application cannot be found in the database"
+                });
+            }
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return new JsonResult(new
+                {
+                    code = OpenIdConnectConstants.Errors.ServerError,
+                    message = "An internal error has occurred"
+                });
+            }
+
+            // Create a new authentication ticket.
+            var ticket = await CreateTicketAsync(request, user);
+
+            // Returning a SignInResult will ask OpenIddict to issue the appropriate access/identity tokens.
+            return SignIn(ticket.Principal, ticket.Properties, ticket.AuthenticationScheme);
+        }
 
         [HttpPost("~/connect/logout"), ValidateAntiForgeryToken]
         public async Task<IActionResult> Logout()
@@ -151,6 +184,13 @@ namespace Mvc.Server
             // will be used to create an id_token, a token or a code.
             var principal = await _signInManager.CreateUserPrincipalAsync(user);
 
+            var ci = principal.Identity as ClaimsIdentity;
+            ci.AddClaim(OpenIdConnectConstants.Claims.Subject, user.Id);
+
+            //if (properties == null)
+            //{
+            //    properties = new AuthenticationProperties();
+            //}
             // Create a new authentication ticket holding the user identity.
             var ticket = new AuthenticationTicket(principal, properties,
                 OpenIdConnectServerDefaults.AuthenticationScheme);
