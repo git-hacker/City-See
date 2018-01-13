@@ -1,0 +1,42 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26730.15
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CitySee.Core", "CitySee.Core\CitySee.Core.csproj", "{80B15710-5B48-45F3-8E15-0970E6E57C50}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CitySee.AuthorizationCenter", "CitySee.AuthorizationCenter\CitySee.AuthorizationCenter.csproj", "{5E6D7B70-F183-4617-B644-6D878642C4AD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Plugins", "Plugins", "{E0239DDB-F0ED-4C0D-B37D-D70E556135DC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuildingComment", "BuildingComment\BuildingComment.csproj", "{0E0C8080-9BDD-47CC-BB21-3081CD6B947F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{80B15710-5B48-45F3-8E15-0970E6E57C50}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{80B15710-5B48-45F3-8E15-0970E6E57C50}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{80B15710-5B48-45F3-8E15-0970E6E57C50}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{80B15710-5B48-45F3-8E15-0970E6E57C50}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5E6D7B70-F183-4617-B644-6D878642C4AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5E6D7B70-F183-4617-B644-6D878642C4AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5E6D7B70-F183-4617-B644-6D878642C4AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5E6D7B70-F183-4617-B644-6D878642C4AD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0E0C8080-9BDD-47CC-BB21-3081CD6B947F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0E0C8080-9BDD-47CC-BB21-3081CD6B947F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0E0C8080-9BDD-47CC-BB21-3081CD6B947F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0E0C8080-9BDD-47CC-BB21-3081CD6B947F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{0E0C8080-9BDD-47CC-BB21-3081CD6B947F} = {E0239DDB-F0ED-4C0D-B37D-D70E556135DC}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {BB9866B8-58FC-45BE-996C-6D7B4E33FCC1}
+	EndGlobalSection
+EndGlobal
