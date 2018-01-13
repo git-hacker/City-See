@@ -10,27 +10,39 @@ if (Platform.OS === 'android' && (Platform.Version * 1) <= 20) {
 
 const styles = StyleSheet.create({
     box: {
-      width: 50,
+      width: 80,
+      height: 100,
       borderStyle: 'solid',
-      borderWidth: 1,
-      borderColor: '#cdcdcd'
+      borderBottomWidth: 1,
+      borderBottomColor: '#cdcdcd'
     },
     content: {
-      padding: 5,
+      padding: 10,
       display: 'flex',
-      flexDirection: 'row',
+      flexDirection: 'column',
       alignItems: 'center',
       justifyContent: 'center',
     },
     img: {
-      width: 30,
-      height: 30,
-      marginBottom: 5,
-      borderRaduis: 30,
-      position: 'relative'
+      width: 60,
+      height: 60,
+      borderRadius: 60,
+    },
+    imgBox: {
+      width: 65,
+      height: 65,
+      borderStyle: 'solid',
+      borderColor: '#f94771',
+      borderWidth: 1,
+      borderRadius: 65,
+      display:'flex',
+      alignItems:'center',
+      justifyContent: 'center'
     },
     name: {
-      color: '#333'
+      color: '#333',
+      width: 70,
+      textAlign: 'center'
     },
     num: {
       position: 'absolute',
@@ -45,20 +57,15 @@ class ProjectListItem extends Component {
       return (
         <View style={styles.box}>
           <View style={styles.content}>
-            <Text style={styles.img}>
-              <Image source={require('../../images/timg.jpg')} style={{width: '100%', height: '100%'}}/>
-            </Text>
-            <Text style={styles.num}>99</Text>
-            <Text style={styles.name}>
-              眷城
-            </Text>
+          <View style={styles.imgBox}>
+            <Image source={this.props.imgSource} style={styles.img}/>
+          </View>
+            <Text style={styles.name} numberOfLines={1}>{this.props.name}</Text>
           </View>
         </View>
       )
   }
 }
-
-
 
 
 const mapStateToProps = (state, action) => {
