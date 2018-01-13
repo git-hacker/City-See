@@ -51,7 +51,15 @@ namespace BuildingComment.Store
         {
             var query = from cm in Context.Comments.AsNoTracking()
                         join b in Context.Buildings.AsNoTracking() on cm.BuildingId equals b.Id
-                        //join c in Context.CustomerInfos.AsNoTracking() on cm.CustomerId equals c.Id
+
+                        join user1 in Context.Users.AsNoTracking() on cm.CustomerId equals user1.Id into uu1
+                        from u1 in uu1.DefaultIfEmpty()
+
+                        join user2 in Context.Users.AsNoTracking() on cm.ToCustomerId equals user2.Id into uu2
+                        from u2 in uu2.DefaultIfEmpty()
+
+                        join cm2 in Context.Comments.AsNoTracking() on cm.UpId equals cm2.Id into cm3
+                        from ucm in cm3.DefaultIfEmpty()
                         select new Comment()
                         {
                             Id = cm.Id,
@@ -60,11 +68,12 @@ namespace BuildingComment.Store
                             Content = cm.Content,
                             CreateTime = cm.CreateTime,
                             CustomerId = cm.CustomerId,
-                            Icon = b.Icon,
+                            Icon = cm.IsAnonymous ? "" : b.Icon,
                             UpId = cm.UpId,
                             BuildingName = b.BuildingName,
                             FirstId = cm.FirstId,
-                                                        //UserName= c
+                            UserName = cm.IsAnonymous ? "匿名用户" : u1.UserName,
+                            ToUserName = ucm.IsAnonymous ? "匿名用户" : u2.UserName
                         };
             return query;
         }

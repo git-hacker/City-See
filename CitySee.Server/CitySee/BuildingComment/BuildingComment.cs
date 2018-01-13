@@ -1,8 +1,14 @@
-﻿using CitySee.Core.Plugin;
-using System;
+﻿using BuildingComment.Manager;
+using BuildingComment.Model.Context;
+using BuildingComment.Store;
 using CitySee.Core;
+using CitySee.Core.Plugin;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Collections.Generic;
+using System.Text;
 using System.Threading.Tasks;
-
 namespace BuildingComment
 {
     public class BuildingComment : IPlugin
@@ -17,17 +23,21 @@ namespace BuildingComment
 
         public Task<ResponseMessage> Init(CitySeeContext context)
         {
-            throw new NotImplementedException();
+            context.Services.AddDbContext<BuildingCommentDbContext>(options => { options.UseMySql(context.ConnectionString); }, ServiceLifetime.Scoped);
+            context.Services.AddScoped<CommentManager>();
+            context.Services.AddScoped<ICommentStore, CommentStore>();
+            context.Services.AddScoped<Store.IGiveLikeStore, GiveLikeStore>();
+            return Task.FromResult(new ResponseMessage());
         }
 
         public Task OnMainConfigChanged(CitySeeContext context, CitySeeConfig newConfig)
         {
-            throw new NotImplementedException();
+            return Task.CompletedTask;
         }
 
         public Task<ResponseMessage> Start(CitySeeContext context)
         {
-            throw new NotImplementedException();
+            return Task.FromResult(new ResponseMessage());
         }
     }
 }

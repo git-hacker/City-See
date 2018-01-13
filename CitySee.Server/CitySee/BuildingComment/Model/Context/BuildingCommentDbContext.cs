@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using CitySee.Core.Model;
+using Microsoft.EntityFrameworkCore;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -24,6 +25,11 @@ namespace BuildingComment.Model.Context
         /// </summary>
         public DbSet<GiveLike> GiveLikes { get; set; }
 
+        /// <summary>
+        /// 用户
+        /// </summary>
+        public DbSet<UserInfo> Users { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -42,6 +48,12 @@ namespace BuildingComment.Model.Context
             {
                 b.HasKey(k => new { k.Id, k.CustomerId });
                 b.ToTable("givelike");
+            });
+
+            builder.Entity<UserInfo>(b =>
+            {
+                b.HasKey(k => new { k.Id });
+                b.ToTable("aspnetusers");
             });
         }
 

@@ -29,6 +29,12 @@ namespace BuildingComment.Model
         public string FirstId { get; set; }
 
         /// <summary>
+        /// 回复人ID
+        /// </summary>
+        [MaxLength(127)]
+        public string ToCustomerId { get; set; }
+
+        /// <summary>
         /// 评论上级Id
         /// </summary>
         [MaxLength(127)]
@@ -72,5 +78,6 @@ namespace BuildingComment.Model
 
         [NotMapped]
         public string ToUserName { get; set; }
+        
     }
 }

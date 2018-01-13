@@ -12,6 +12,9 @@ namespace BuildingComment
     {
         public CommentMappingProfile()
         {
+            CreateMap<CommentDetailResponse, Comment>();
+            CreateMap<Comment, CommentDetailResponse>();
+
             CreateMap<CommentResponse, Comment>();
             CreateMap<Comment, CommentResponse>();
 
