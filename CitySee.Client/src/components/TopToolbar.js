@@ -35,7 +35,7 @@ class TopToolbar extends Component {
     render() {
     
         return (
-            <View style={LayerStyles.tarBar}>
+            <View style={[LayerStyles.tarBar]}>
                 <View style={LayerStyles.tarBar}>
                 <TabBar tintColor='red'>
                     <TabBar.Item title='首页'

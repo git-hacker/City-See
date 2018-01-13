@@ -48,7 +48,7 @@ class Layer extends Component {
         const [router, ...children] = this.filterChildren();
 
         return (
-            <View style={LayerStyles.xyhLayer}>
+            <View style={LayerStyles.tarBar}>
                
                     <View style={[LayerStyles.scrollPanel, this.props.style]}>
 
