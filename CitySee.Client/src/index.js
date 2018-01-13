@@ -130,7 +130,7 @@ class IndexPage extends Component {
     for (let i = 0; i < 100; i++) {
       td.push(i)
     }
-    console.log(ConnectedRouter)
+    console.log('ConnectedRouter')
     return (
       <Provider store={store}>
 
@@ -140,7 +140,6 @@ class IndexPage extends Component {
             {/* <View><Text>sjfasdjf</Text></View> */}
           </Layer>
         </ConnectedRouter>
-
       </Provider >
       // <View><Text>sjfasdjf</Text></View>
     )
