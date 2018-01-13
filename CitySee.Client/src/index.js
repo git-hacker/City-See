@@ -15,7 +15,7 @@ import rootReducer from './reducers';
 // import LoginPage from './login/login';
 import {composeWithDevTools} from 'redux-devtools-extension';
 import runSaga from './saga'
-import TabBar from './components/TopToolbar'
+import HomePage from './pages/indexList/indexPage'
 
 const history = createHistory();
 
@@ -136,7 +136,7 @@ class IndexPage extends Component {
 
         <ConnectedRouter history={history}>
           <Layer>
-            <Route exact path='/' component={TabBar} />
+            <Route exact path='/' component={HomePage} />
             {/* <View><Text>sjfasdjf</Text></View> */}
           </Layer>
         </ConnectedRouter>
