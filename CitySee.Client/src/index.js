@@ -12,10 +12,10 @@ import createSagaMiddleware from 'redux-saga';
 import ignoreSubspaceMiddleware from './ignoreSubspaceMiddleware'
 import {createStore} from 'redux-dynamic-reducer'
 import rootReducer from './reducers';
-import LoginPage from './login/login';
+// import LoginPage from './login/login';
 import {composeWithDevTools} from 'redux-devtools-extension';
 import runSaga from './saga'
-
+import TabBar from './components/TopToolbar'
 
 const history = createHistory();
 
@@ -136,7 +136,8 @@ class IndexPage extends Component {
 
         <ConnectedRouter history={history}>
           <Layer>
-            <Route exact path='/' component={LoginPage} />
+            <Route exact path='/' component={TabBar} />
+            {/* <View><Text>sjfasdjf</Text></View> */}
           </Layer>
         </ConnectedRouter>
 
