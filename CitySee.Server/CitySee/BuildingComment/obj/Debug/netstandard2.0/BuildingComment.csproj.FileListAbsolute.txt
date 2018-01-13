@@ -1,0 +1,11 @@
+D:\CitySee\CitySee.Server\CitySee\BuildingComment\bin\Debug\netstandard2.0\BuildingComment.deps.json
+D:\CitySee\CitySee.Server\CitySee\BuildingComment\bin\Debug\netstandard2.0\BuildingComment.dll
+D:\CitySee\CitySee.Server\CitySee\BuildingComment\bin\Debug\netstandard2.0\BuildingComment.pdb
+D:\CitySee\CitySee.Server\CitySee\BuildingComment\bin\Debug\netstandard2.0\CitySee.Core.dll
+D:\CitySee\CitySee.Server\CitySee\BuildingComment\bin\Debug\netstandard2.0\CitySee.Core.pdb
+D:\CitySee\CitySee.Server\CitySee\BuildingComment\obj\Debug\netstandard2.0\BuildingComment.csprojResolveAssemblyReference.cache
+D:\CitySee\CitySee.Server\CitySee\BuildingComment\obj\Debug\netstandard2.0\BuildingComment.csproj.CoreCompileInputs.cache
+D:\CitySee\CitySee.Server\CitySee\BuildingComment\obj\Debug\netstandard2.0\BuildingComment.AssemblyInfoInputs.cache
+D:\CitySee\CitySee.Server\CitySee\BuildingComment\obj\Debug\netstandard2.0\BuildingComment.AssemblyInfo.cs
+D:\CitySee\CitySee.Server\CitySee\BuildingComment\obj\Debug\netstandard2.0\BuildingComment.dll
+D:\CitySee\CitySee.Server\CitySee\BuildingComment\obj\Debug\netstandard2.0\BuildingComment.pdb

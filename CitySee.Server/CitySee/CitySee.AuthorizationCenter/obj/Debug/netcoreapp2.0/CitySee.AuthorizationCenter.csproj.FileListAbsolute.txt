@@ -1,0 +1,4 @@
+D:\CitySee\CitySee.Server\CitySee\CitySee.AuthorizationCenter\obj\Debug\netcoreapp2.0\CitySee.AuthorizationCenter.csprojResolveAssemblyReference.cache
+D:\CitySee\CitySee.Server\CitySee\CitySee.AuthorizationCenter\obj\Debug\netcoreapp2.0\CitySee.AuthorizationCenter.csproj.CoreCompileInputs.cache
+D:\CitySee\CitySee.Server\CitySee\CitySee.AuthorizationCenter\obj\Debug\netcoreapp2.0\CitySee.AuthorizationCenter.AssemblyInfoInputs.cache
+D:\CitySee\CitySee.Server\CitySee\CitySee.AuthorizationCenter\obj\Debug\netcoreapp2.0\CitySee.AuthorizationCenter.AssemblyInfo.cs
