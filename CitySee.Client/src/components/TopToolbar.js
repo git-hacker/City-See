@@ -12,42 +12,6 @@ if (Platform.OS === 'android' && (Platform.Version * 1) <= 20) {
     sbHeight = 0;
 }
 
-const styles = StyleSheet.create({
-    icon: {
-        width: 18,
-        height: 18
-    },
-    navBarContainer: {
-
-    },
-    statusBar: {
-        backgroundColor: 'transparent',
-        height: 0
-    },
-    navBar: {
-        height: 56 + sbHeight,
-        padding: 0
-    },
-    opbar: {
-        position: 'absolute',
-        flexDirection: "row",
-        position: "absolute",
-        top: sbHeight,
-        padding: 16,
-        width: "100%",
-        left: 0,
-        right: 0,
-        justifyContent: 'space-between',
-        alignItems: 'center'
-    },
-    back: {
-        position: 'absolute',
-        bottom: 0,
-        left: 0,
-        right: 0,
-        top: 0,
-    }
-})
 
 class TopToolbar extends Component {
 
@@ -71,8 +35,8 @@ class TopToolbar extends Component {
     render() {
     
         return (
-            <View style={LayerStyles.xyhLayer}>
-                <View style={LayerStyles.xyhLayer}>
+            <View style={LayerStyles.tarBar}>
+                <View style={LayerStyles.tarBar}>
                 <TabBar tintColor='red'>
                     <TabBar.Item title='首页'
                         iconStyle={{width:20,height:20}}
