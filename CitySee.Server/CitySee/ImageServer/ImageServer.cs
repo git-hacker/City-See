@@ -7,11 +7,11 @@ namespace ImageServer
 {
     public class ImageServer : IPlugin
     {
-        public string PluginID => throw new NotImplementedException();
+        public string PluginID => "5119eee1-b567-4d2b-975a-d1f817b8e574";
 
-        public string PluginName => throw new NotImplementedException();
+        public string PluginName => "Image Upload";
 
-        public string Description => throw new NotImplementedException();
+        public string Description => "Image Upload Server";
 
         public int Order => throw new NotImplementedException();
 

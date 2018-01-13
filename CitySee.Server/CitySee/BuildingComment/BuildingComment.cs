@@ -7,11 +7,11 @@ namespace BuildingComment
 {
     public class BuildingComment : IPlugin
     {
-        public string PluginID => throw new NotImplementedException();
+        public string PluginID => "0b3dfdec-f9d4-4a00-8595-1cfb875b79c4";
 
-        public string PluginName => throw new NotImplementedException();
+        public string PluginName => "building comment";
 
-        public string Description => throw new NotImplementedException();
+        public string Description => "building comment server";
 
         public int Order => throw new NotImplementedException();
 
