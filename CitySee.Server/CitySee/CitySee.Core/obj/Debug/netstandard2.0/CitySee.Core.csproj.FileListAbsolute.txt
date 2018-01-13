@@ -1,9 +1,0 @@
-D:\CitySee\CitySee.Server\CitySee\CitySee.Core\bin\Debug\netstandard2.0\CitySee.Core.deps.json
-D:\CitySee\CitySee.Server\CitySee\CitySee.Core\bin\Debug\netstandard2.0\CitySee.Core.dll
-D:\CitySee\CitySee.Server\CitySee\CitySee.Core\bin\Debug\netstandard2.0\CitySee.Core.pdb
-D:\CitySee\CitySee.Server\CitySee\CitySee.Core\obj\Debug\netstandard2.0\CitySee.Core.csprojResolveAssemblyReference.cache
-D:\CitySee\CitySee.Server\CitySee\CitySee.Core\obj\Debug\netstandard2.0\CitySee.Core.csproj.CoreCompileInputs.cache
-D:\CitySee\CitySee.Server\CitySee\CitySee.Core\obj\Debug\netstandard2.0\CitySee.Core.AssemblyInfoInputs.cache
-D:\CitySee\CitySee.Server\CitySee\CitySee.Core\obj\Debug\netstandard2.0\CitySee.Core.AssemblyInfo.cs
-D:\CitySee\CitySee.Server\CitySee\CitySee.Core\obj\Debug\netstandard2.0\CitySee.Core.dll
-D:\CitySee\CitySee.Server\CitySee\CitySee.Core\obj\Debug\netstandard2.0\CitySee.Core.pdb

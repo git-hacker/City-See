@@ -3,9 +3,9 @@ using System;
 using CitySee.Core;
 using System.Threading.Tasks;
 
-namespace BuildingComment
+namespace ImageServer
 {
-    public class BuildingComment : IPlugin
+    public class ImageServer : IPlugin
     {
         public string PluginID => throw new NotImplementedException();
 
