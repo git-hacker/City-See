@@ -13,6 +13,7 @@ import ignoreSubspaceMiddleware from './ignoreSubspaceMiddleware'
 import {createStore} from 'redux-dynamic-reducer'
 import rootReducer from './reducers';
 // import LoginPage from './login/login';
+import Toolbar from './components/TopToolbar'
 import {composeWithDevTools} from 'redux-devtools-extension';
 import runSaga from './saga'
 import HomePage from './pages/indexList/indexPage'
@@ -136,7 +137,7 @@ class IndexPage extends Component {
 
         <ConnectedRouter history={history}>
           <Layer>
-            <Route exact path='/' component={HomePage} />
+            <Route exact path='/' component={Toolbar} />
             {/* <View><Text>sjfasdjf</Text></View> */}
           </Layer>
         </ConnectedRouter>

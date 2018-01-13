@@ -30,9 +30,9 @@ class HomePage extends Component {
                   <Text>这是中间的滚动页面</Text>
                   <Text>页面展示在这个组件中</Text>
                 </ScrollView>
-                <View style={{justifyContent: 'flex-end', height: 96}}>
+                {/* <View style={{justifyContent: 'flex-end', height: 96}}>
                   <TabBar />
-                </View>
+                </View> */}
                 
             </View>
  

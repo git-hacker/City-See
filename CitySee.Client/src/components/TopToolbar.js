@@ -7,6 +7,7 @@ import { replace } from 'react-router-redux';
 // import signals from 'signals'
 import LayerStyles from './LayerStyle';
 import MapIndex from '../map'
+import IndexPage from '../pages/indexList/indexPage'
 
 let sbHeight = StatusBar.currentHeight;
 if (Platform.OS === 'android' && (Platform.Version * 1) <= 20) {
@@ -17,7 +18,7 @@ if (Platform.OS === 'android' && (Platform.Version * 1) <= 20) {
 class TopToolbar extends Component {
 
     state = {
-      
+        selectedTab: 'map'
     }
 
     
@@ -46,6 +47,7 @@ class TopToolbar extends Component {
                         icon={require('../images/sy-20x20.png')} 
                         selectedIcon={require('../images/sy2-20x20.png')}
                         selected={this.state.selectedTab === 'index'} onPress={() => this.changeTab('index')}>
+                        <IndexPage actived={this.state.selectedTab === 'index'} match={this.props.match}/>
                     </TabBar.Item>
                     <TabBar.Item title="地标"
                         iconStyle={{width:20,height:20}}
