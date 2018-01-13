@@ -10,11 +10,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#f94771',
   },
   title:{
-    paddingTop: 15,
+    paddingTop: 25,
     paddingBottom: 15,
     textAlign: 'center',
     color: 'white',
-    fontSize: 24,
+    fontSize: 20,
   }
 })
 

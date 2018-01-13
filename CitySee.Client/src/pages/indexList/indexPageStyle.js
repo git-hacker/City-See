@@ -5,6 +5,15 @@ export const IndexPageStyles = StyleSheet.create({
     content:{
       flexDirection: 'column',
       flex:1
+    },
+    tarbar: {
+      justifyContent: 'flex-end',
+      height: 96
+    },
+    topBuilding: {
+      flexDirection: 'row',
+      overflow:'scroll',
+      width: '100%',
     }
 
 })

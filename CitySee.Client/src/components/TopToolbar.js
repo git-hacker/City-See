@@ -18,7 +18,7 @@ if (Platform.OS === 'android' && (Platform.Version * 1) <= 20) {
 class TopToolbar extends Component {
 
     state = {
-        selectedTab: 'map'
+        selectedTab: 'index'
     }
 
     
