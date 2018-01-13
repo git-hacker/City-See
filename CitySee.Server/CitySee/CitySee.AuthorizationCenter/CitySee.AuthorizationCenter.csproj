@@ -26,6 +26,7 @@
     <PackageReference Include="Microsoft.Extensions.PlatformAbstractions" Version="1.1.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.BrowserLink" Version="2.0.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.0" />
+    <PackageReference Include="NLog.Extensions.Logging" Version="1.0.0-rtm-rc5" />
     <PackageReference Include="OpenIddict" Version="2.0.0-rc1-0739" />
     <PackageReference Include="OpenIddict.EntityFrameworkCore" Version="2.0.0-rc1-0739" />
     <PackageReference Include="OpenIddict.Mvc" Version="2.0.0-rc1-0739" />
@@ -43,5 +44,15 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CitySee.Core\CitySee.Core.csproj" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <None Update="Config.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="nlog.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 </Project>

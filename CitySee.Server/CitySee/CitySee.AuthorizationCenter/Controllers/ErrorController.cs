@@ -7,10 +7,11 @@
 using AspNet.Security.OpenIdConnect.Primitives;
 using CitySee.Core;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace AuthorizationCenter.Controllers
 {
-    public class ErrorController : Controller
+    public class ErrorController : BaseController<ErrorController>
     {
         [HttpGet, HttpPost, Route("~/error")]
         public string Error(OpenIdConnectResponse response)
@@ -19,6 +20,7 @@ namespace AuthorizationCenter.Controllers
             {
                 return "error";
             }
+            Logger.LogError(JsonHelper.ToJson(response));
             return JsonHelper.ToJson(response);
         }
     }

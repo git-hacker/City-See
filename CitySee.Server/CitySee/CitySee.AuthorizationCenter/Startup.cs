@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using NLog.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -124,11 +126,23 @@ namespace CitySee.AuthorizationCenter
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
+            loggerFactory.AddDebug();
+
+
             if (env.IsDevelopment())
             {
+                //开发环境下，日志文件输出到控制台（在VS中的输出中查看）
+                loggerFactory.AddConsole(Configuration.GetSection("Logging"));
+
+
                 app.UseDeveloperExceptionPage();
+            }
+            else
+            {
+                //非开发环境下，日志采用NLog输出到指定文件中
+                loggerFactory.AddNLog();
             }
 
             app.UseMvc();
