@@ -1,8 +1,9 @@
-<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp2.0</TargetFramework>
+    <RuntimeIdentifiers>win10-x64;osx.10.11-x64;win7-x64</RuntimeIdentifiers>
   </PropertyGroup>
 
 
@@ -36,7 +37,6 @@
 
 
   <ItemGroup>
-    <Folder Include="Dto\" />
     <Folder Include="Manangers\" />
     <Folder Include="Stores\" />
   </ItemGroup>
@@ -44,6 +44,16 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CitySee.Core\CitySee.Core.csproj" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <Content Update="Config.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="nlog.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 

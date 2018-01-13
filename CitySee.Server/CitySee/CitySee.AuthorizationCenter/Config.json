@@ -1,7 +1,15 @@
 ﻿{
   "Data": {
     "DefaultConnection": {
-      "ConnectionString": "Server=localhost;database=cityseedb;uid=root;pwd=root;"
+      "ConnectionString": "Server=192.168.50.145;database=cityseedb;uid=root;pwd=root;"
+    }
+  },
+  "Logging": {
+    "IncludeScopes": false,
+    "LogLevel": {
+      "Default": "Debug",
+      "System": "Information",
+      "Microsoft": "Information"
     }
   }
 }
