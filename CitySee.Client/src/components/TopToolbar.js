@@ -8,6 +8,7 @@ import { replace } from 'react-router-redux';
 import LayerStyles from './LayerStyle';
 import MapIndex from '../map'
 import IndexPage from '../pages/indexList/indexPage'
+import Attention from '../attention'
 
 let sbHeight = StatusBar.currentHeight;
 if (Platform.OS === 'android' && (Platform.Version * 1) <= 20) {
@@ -67,12 +68,15 @@ class TopToolbar extends Component {
                         icon={require('../images/heart.png')} 
                         selectedIcon={require('../images/heart2.png')}
                         selected={this.state.selectedTab === 'message'} onPress={() => this.changeTab('message')}>
+                        <IndexPage page='attention' actived={this.state.selectedTab === 'index'} match={this.props.match}/>                        
                     </TabBar.Item>
                     <TabBar.Item title="我"
                         iconStyle={{width:25,height:25}}
                         icon={require('../images/person.png')}
                         selectedIcon={require('../images/person2.png')}
                         selected={this.state.selectedTab === 'my'} onPress={() => this.changeTab('my')}>
+                        
+                        <Attention actived={this.state.selectedTab === 'my'} match={this.props.match} />
                     </TabBar.Item>
 
                 </TabBar>

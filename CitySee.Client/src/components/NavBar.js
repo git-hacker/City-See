@@ -30,7 +30,7 @@ class NavBar extends Component {
     
         return (
             <View style={styles.header}>
-                <Text style={styles.title}>眷城</Text>
+                <Text style={styles.title}>{this.props.text}</Text>
             </View>
         )
     }
