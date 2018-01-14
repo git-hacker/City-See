@@ -5,11 +5,7 @@ const styles = StyleSheet.create(
     {
         main: {
             // padding: 5,
-            paddingBottom: 10,
-            marginBottom: 10,
-            borderStyle: 'solid',
-            borderBottomColor: '#e5e5e5',
-            borderBottomWidth: 1
+            // paddingBottom: 10,
         },
         header: {
             display: 'flex',
@@ -17,7 +13,7 @@ const styles = StyleSheet.create(
         },
         headerRight: {
             display: 'flex',
-            marginLeft: 5,
+            marginLeft: 10,
             flexDirection: 'column',
             justifyContent: 'space-around'
         },
@@ -54,7 +50,7 @@ class ListItem extends Component {
                         <Text style={{color: '#f94771'}}>{rowData.name}</Text>
                         <View style={{display: 'flex', flexDirection: 'row'}}>
                             <Text>{rowData.time}</Text>
-                            <Text style={{marginLeft: 5,marginRight: 5}}>来自</Text>
+                            <Text style={{marginLeft: 10,marginRight: 8}}>来自</Text>
                             <Text>{rowData.userName}</Text>
                         </View>
                     </View>
