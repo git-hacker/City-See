@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace CitySee.Core.Dto
+namespace CitySee.Core
 {
     public static class ModelStateExtension
     {

@@ -2,7 +2,10 @@ import React,{Component} from 'react'
 import {View, StyleSheet, Text, Platform, ViewPropTypes, Image, TouchableWithoutFeedback} from 'react-native'
 import {MapView, Marker, Polyline, MultiPoint} from 'react-native-amap3d'
 import { SearchBar, Toast } from 'antd-mobile'
+import { connect } from 'react-redux'
+import ApiClient from '../utils/apiClient'
 
+const key = '5ce45efffba463e5a2b1827ced847b7d'
 
 const styles = StyleSheet.create(
   {
@@ -60,7 +63,20 @@ class MapIndex extends Component{
     }
   ]
 
-  onLocation = (v) => {
+  componentWillMount () {
+    ApiClient.get(`http://restapi.amap.com/v3/geocode/regeo?key=${key}&location=116.396574,39.992706`).then(res=> {
+      console.log(res)
+    }).catch((err) => {
+      console.log(err)
+    })
+    ApiClient.get(`http://restapi.amap.com/v3/ip?key=${key}`).then(res=> {
+      console.log(res)
+    }).catch((err) => {
+      console.log(err)
+    })
+  }
+
+  onLocation = async(v) => {
     console.log(v)
     // this.props.searchMarks()
   }
@@ -95,7 +111,7 @@ class MapIndex extends Component{
       </View>
       <MapView
         rotateEnabled={true}
-        // locationEnabled={true}
+        locationEnabled={true}
         zoomLevel={17}
         tilt={60}
         tiltEnabled={true}
@@ -103,9 +119,9 @@ class MapIndex extends Component{
           latitude: 30.67,
           longitude: 104.06
         }}
-        // locationInterval={30000}
+        locationInterval={3000}
         showsLocationButton={true}
-        // onLocation={({nativeEvent}) => this.onLocation(nativeEvent)}
+        onLocation={({nativeEvent}) => this.onLocation(nativeEvent)}
         showsBuildings={true}
         showsLabels={true}
         style={styles.map}>
@@ -144,5 +160,15 @@ class MapIndex extends Component{
     </View>
   }
 }
+const mapStateToProps = (state, action) => {
+  return {
+     
+  }
+}
+const mapDispatchToProps = (dispatch) => {
+  return {
+      dispatch
+  }
+}
 
-export default MapIndex;
+export default connect(mapStateToProps, mapDispatchToProps)(MapIndex)
