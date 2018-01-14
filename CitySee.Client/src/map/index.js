@@ -48,7 +48,7 @@ class MapIndex extends Component{
     {
       latitude: 30.671697,
       longitude: 104.060501,
-      total: '10',
+      total: '20',
       name: '东方新希望a'
     },{
       latitude: 30.670047,
@@ -63,17 +63,43 @@ class MapIndex extends Component{
     }
   ]
 
+  search = async() => {
+    try {
+      let res = await ApiClient.get(`http://restapi.amap.com/v3/place/around?key=${key}&location=104.060601,30.670957&radius=500`)    
+      console.log(res, 'resresresresresresresresresresres')
+      let latitude = []
+      res.data.pois.forEach(v => {
+        const arr = v.location.split(',')
+        latitude.push(v.id)
+        this._points.push({
+          latitude: arr[1]*1,
+          longitude: arr[0]*1,
+          content: `${v.pname}${v.cityname}${v.adname}${v.address}${v.name}`
+        })
+      })
+      let obj = {
+        pageSize: 20,
+        pageIndex: 0
+      }
+      let resq = await ApiClient.post(`http://192.168.50.145:6008/api/building/list`)
+      console.log(resq)
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
   componentWillMount () {
     ApiClient.get(`http://restapi.amap.com/v3/geocode/regeo?key=${key}&location=116.396574,39.992706`).then(res=> {
       console.log(res)
     }).catch((err) => {
       console.log(err)
     })
-    ApiClient.get(`http://restapi.amap.com/v3/ip?key=${key}`).then(res=> {
-      console.log(res)
-    }).catch((err) => {
-      console.log(err)
-    })
+    // ApiClient.get(`http://restapi.amap.com/v3/ip?key=${key}`).then(res=> {
+    //   console.log(res)
+    // }).catch((err) => {
+    //   console.log(err)
+    // })
+    this.search()
   }
 
   onLocation = async(v) => {
@@ -107,17 +133,17 @@ class MapIndex extends Component{
   render(){
     return <View style={StyleSheet.absoluteFill}>
       <View>
-        <SearchBar clearTextOnFocus={true} placeholder='对你附近的地名进行搜索' placeholderTextColor='#999' onSubmit={val => this.onSubmit(val)} />
+        {/* <SearchBar clearTextOnFocus={true} placeholder='对你附近的地名进行搜索' placeholderTextColor='#999' onSubmit={val => this.onSubmit(val)} /> */}
       </View>
       <MapView
         rotateEnabled={true}
         locationEnabled={true}
-        zoomLevel={17}
+        zoomLevel={20}
         tilt={60}
         tiltEnabled={true}
         coordinate={{
-          latitude: 30.67,
-          longitude: 104.06
+          latitude: 30.670957,
+          longitude: 104.060601
         }}
         locationInterval={3000}
         showsLocationButton={true}
@@ -149,7 +175,7 @@ class MapIndex extends Component{
                 <Marker key={index} icon={() => <Image style={styles.imgStyle} source={require('../images/mess.png')} />} coordinate={v}>
                   <TouchableWithoutFeedback onPress={() => this.onInfoWindowPress()}>
                     <View style={styles.box}>
-                      <Text style={{color: '#fff'}}>自定义信息窗体</Text>
+                      <Text style={{color: '#fff'}}>{v.content}</Text>
                     </View>
                   </TouchableWithoutFeedback>
                 </Marker>
