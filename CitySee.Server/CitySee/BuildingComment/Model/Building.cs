@@ -18,6 +18,8 @@ namespace BuildingComment.Model
 
         public string Icon { get; set; }
 
+        public long CommentNum { get; set; }
+
         public DateTime CreateTime { get; set; }
     }
 }

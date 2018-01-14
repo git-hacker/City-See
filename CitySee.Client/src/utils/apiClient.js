@@ -93,22 +93,22 @@ const ApiClient = {
         const headers = new Headers();
         headers.append('Accept', 'application/json');
         headers.append("Content-Type", "application/json");
-        if (useToken) {
-            let user = store.getState().oidc.user || {};
-            let token = user.access_token;
-            if (user && user.userInfo) {
-                rc.userInfo = user.userInfo;
+        // if (useToken) {
+        //     let user = store.getState().oidc.user || {};
+        //     let token = user.access_token;
+        //     if (user && user.userInfo) {
+        //         rc.userInfo = user.userInfo;
 
-            }
-            if(stoken){
-                token = stoken;
-            }
-            if (!token && module.hot) {
-                token = testToken;
-            }
-            rc.token = token;
-            headers.append('Authorization', `Bearer ${token}`);
-        }
+        //     }
+        //     if(stoken){
+        //         token = stoken;
+        //     }
+        //     if (!token && module.hot) {
+        //         token = testToken;
+        //     }
+        //     rc.token = token;
+        //     headers.append('Authorization', `Bearer ${token}`);
+        // }
         const options = {
             method: 'GET',
             headers,
@@ -125,6 +125,7 @@ const ApiClient = {
         logRequestStart(rc)
         return fetch(url, options)
             .then((res) => {
+                console.log(res, 'rsesasdadas')
                 let endTime = Date.now().valueOf();
                 rc.cost = endTime - startTime;
                 rc.responseStatus = res.status.toString();

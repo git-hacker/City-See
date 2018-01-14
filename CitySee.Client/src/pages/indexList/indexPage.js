@@ -10,15 +10,29 @@ import TabBar from '../../components/TopToolbar'
 import ListItem from '../../components/listItem'
 import Comment from '../../components/Comment'
 
-const style = StyleSheet.create({
-  main: {
-    // padding: 5,
-    marginBottom: 10,
-    borderStyle: 'solid',
-    borderBottomColor: '#e5e5e5',
-    borderBottomWidth: 1
-}
-})
+const style = StyleSheet.create(
+    {
+        main: {
+            // padding: 5,
+            marginBottom: 10,
+            borderStyle: 'solid',
+            borderBottomColor: '#e5e5e5',
+            borderBottomWidth: 1
+        },
+        right:{
+            height: 120,
+            position: 'absolute',
+            // backgroundColor: 'red',
+            right:0,
+            top:0,
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'center',
+            width: '10%'
+        }
+    }
+)
 
 class HomePage extends Component {
 
@@ -52,19 +66,19 @@ class HomePage extends Component {
                 imgSource:  require('../../images/timg.jpg'),
                 },
                 {
-                  name: '首座max',
+                  name: '安邦成都金融广场',
                   imgSource:  require('../../images/timg.jpg'),
                 },
                 {
-                  name: '成都银泰中心',
+                  name: '东方希望中心',
                   imgSource:  require('../../images/timg.jpg'),
                 },
                 {
-                  name: '成都银泰中心',
+                  name: '首座MAX',
                   imgSource:  require('../../images/timg.jpg'),
                 },
                 {
-                  name: '成都银泰中心',
+                  name: '创新时代广场',
                   imgSource:  require('../../images/timg.jpg'),
                 },
                 {
@@ -111,19 +125,28 @@ class HomePage extends Component {
         }
         return (
             <View style={IndexPageStyles.content}>
-                <NavBar titleName='眷城'/>
+                <NavBar text={this.props.titleName === 'attention' ? '关注' : '眷城'}/>
                 <View style={{padding: 10, height: '100%'}}>
-                    <ScrollView style={{height: 240}} horizontal>
-                    <View style={IndexPageStyles.topBuilding}>
+                    <ScrollView style={{height: 240, width: this.props.page === 'attention' ? '90%' : '100%'}} horizontal>
+                    <View style={[IndexPageStyles.topBuilding]}>
                     {
                         this.state.list.map((item, index) => {
-                        return (
-                            <ProjectItem key={index} name={item.name} imgSource={item.imgSource}/>
-                        )
+                            return (
+                                <ProjectItem key={index} name={item.name} imgSource={item.imgSource}/>
+                            )
                         })
                     }
                     </View>
                     </ScrollView>
+                    {
+                        this.props.page === 'attention' ?
+                        <View style={style.right}>
+                            <Image style={{height:30, width: 30}} source={require('../../images/right_b.png')}/>
+                        </View>
+                        :
+                        null
+                    }
+                    
                     <ListView
                         ref={el => this.lv = el}
                         onScroll={() => { console.log('scroll') }}
