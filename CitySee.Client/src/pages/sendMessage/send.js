@@ -10,12 +10,14 @@ import SubNavBar from '../../components/SubNavBar';
 const CheckboxItem = Checkbox.CheckboxItem;
 const styles = StyleSheet.create({
   myHouse: {
+      display: 'flex',
       flex: 1,
       marginTop: 10,
       flexDirection: 'row',
       paddingLeft: 10,
       paddingRight: 10,
       alignItems:'center',
+      justifyContent: 'space-between'
     }
 })
 
@@ -154,18 +156,38 @@ class SendPage extends Component {
     submit = () => {
       console.log('发送')
     }
+    changeTextArea = (val) => {
+      console.log(val, 123)
+      if (val) {
+        this.setState({
+          canEdit: true
+        })
+      } else {
+        this.setState({
+          canEdit: false
+        })
+      }
+      
+    }
     render() {
         const { files } = this.state;
         return (
             <Layer style={{flexDirection: 'column', paddingBottom: 5}}>
-                <SubNavBar title='分享' hideBackIcon={true} 
-                right={<Button  disabled={!this.state.canEdit}  size='small'
-                onClick={this.onsubmit}><Text style={{color: 'white'}}>发送</Text></Button>} >
+                <SubNavBar title='分享'
+                right={this.state.canEdit? 
+                  <TouchableOpacity activeOpacity={0.7}  onPress={this.submit} >
+                      <View>
+                        <Text style={{color: 'white', fontSize:16}}>发送</Text>
+                      </View>
+                  </TouchableOpacity>
+                      : null}>
+                  
                     <View style={{marginTop: 5}}>
                         <TextareaItem
                           placeholder="一起来分享你的故事吧..."
                           rows={6}
                           style={{borderWidth: 0}}
+                          onChange= {this.changeTextArea}
                         />
                         <WingBlank style={{marginTop: 15,marginBottom: 10}}>
                             <ImagePicker
@@ -175,18 +197,17 @@ class SendPage extends Component {
                             />
                         </WingBlank>
                     </View>
-                    <WhiteSpace size='sm' />
                     <CheckboxItem onChange={this.onChange()}>
                       <Text>匿名</Text>
                     </CheckboxItem>
                     <WhiteSpace size='sm' />
                     <View style={styles.myHouse}>
-                      <View style={{justifyContent: 'flex-start',flexDirection: 'row',}}>
+                      <View style={{justifyContent: 'flex-start',flexDirection: 'row', alignItems:'center'}}>
                           <Image source={require('../../images/myHouse.png')}/>
-                          <Text>所在建筑</Text>
+                          <Text style={{marginLeft: 10}}>所在建筑</Text>
                       </View>
                       <View style={{justifyContent: 'flex-end'}}>
-                        <Image source={require('../../images/right.png')}/>
+                        <Image source={require('../../images/right.png')} style={{width: 25, height:25}}/>
                       </View>
                     </View>
 
