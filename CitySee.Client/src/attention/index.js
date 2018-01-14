@@ -114,7 +114,7 @@ class HomePage extends Component {
         }
         return (
             <View>
-                <NavBar text='我的关注'/>
+                <NavBar titleName='我的关注'/>
                 <View style={{padding: 10, height: '100%'}}>
                     <ListView
                         ref={el => this.lv = el}

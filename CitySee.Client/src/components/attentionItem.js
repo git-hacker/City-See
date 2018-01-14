@@ -8,6 +8,13 @@ const styles = StyleSheet.create(
             display: 'flex',
             flexDirection: 'row',
             alignItems: 'center',
+            marginBottom: 10,
+            paddingBottom: 5,
+            width: '100%',
+            flexWrap: 'nowrap',
+            borderStyle : 'solid',
+            borderBottomColor: '#e5e5e5',
+            borderBottomWidth: 1
             // justifyContent: 'center'
         },
         img:{
@@ -18,7 +25,14 @@ const styles = StyleSheet.create(
         },
         right: {
             display: 'flex',
-            flexDirection: 'row'
+            width: '100%',
+            flexShrink: 1,
+            flexDirection: 'row',
+            justifyContent: 'space-between'
+        },
+        rightLeft: {
+            width:'60%',
+            marginLeft: 10
         }
     }
 )
@@ -33,9 +47,9 @@ class attentionItem extends Component {
                 <View style={styles.right}>
                     <View style={styles.rightLeft}>
                         <Text>{rowData.name}</Text>
-                        <Text>{rowData.place}</Text>
+                        <Text numberOfLines={1}>{rowData.place}</Text>
                     </View>
-                    <Button type='primary'>关注</Button>
+                    <Button type='primary' size='small' style={{backgroundColor: '#f94771', borderColor: '#f94771'}}>{rowData.isAttention ? '取消关注' : '关注'}</Button>
                 </View>
             </View>
         )
