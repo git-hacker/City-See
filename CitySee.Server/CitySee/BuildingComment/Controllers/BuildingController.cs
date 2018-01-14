@@ -103,16 +103,16 @@ namespace BuildingComment.Controllers
             }
             return response;
         }
-        
+
         /// <summary>
         /// 根据楼盘获取评论列表
         /// </summary>
         /// <param name="user"></param>
         /// <param name="condition"></param>
         /// <returns></returns>
+        [AllowAnonymous]
         [HttpPost("comment")]
-        [CheckPermission]
-        public async Task<PagingResponseMessage<CommentResponse>> GetListByBuildingId(UserInfo user, [FromBody] CommentSearch condition)
+        public async Task<PagingResponseMessage<CommentResponse>> GetListByBuildingId([FromBody] CommentSearch condition)
         {
             var response = new PagingResponseMessage<CommentResponse>();
             if (!ModelState.IsValid)

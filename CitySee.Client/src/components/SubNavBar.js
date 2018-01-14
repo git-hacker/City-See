@@ -10,7 +10,7 @@ import Spinner from './Spinner'
 import NavBar, {NavButton, NavButtonText, NavTitle} from 'react-native-nav'
 import LayerStyles from './LayerStyle';
 
-const navLeft = require('../images/navLeft.png');
+const left = require('../images/left.png');
 
 let sbHeight = StatusBar.currentHeight || 0;
 if (Platform.OS === 'android' && (Platform.Version * 1) <= 20) {
@@ -27,10 +27,6 @@ const styles = StyleSheet.create({
         paddingRight: 0
     },
     pageContent: {
-        // position: 'relative',
-        // top: 3*u + sbHeight,
-        // width: '100%',
-        // bottom: 0 
         flex: 1
     },
     transparent: {
@@ -41,32 +37,21 @@ const styles = StyleSheet.create({
     },
     footerContent: {
         height: 3.5 * u,
-        // bottom:0,
-        // position:'absolute',
         width: '100%',
         zIndex: 2
+    },
+    myNavBar: {
+        display: 'flex',
+        flexDirection:'row',
+        alignItems: 'center',
+        height: 60,
+        backgroundColor: '#f94771',
+        paddingLeft: 10,
+        paddingRight: 10,
+        paddingTop: 25,
+        paddingBottom: 15,
     }
 })
-
-const navbarStyles = StyleSheet.create({
-    statusBar: {
-        //  backgroundColor: 'red',
-
-    },
-    navBar: {
-        backgroundColor: '#f3f3f3',
-        height: 3 * u,
-        paddingLeft: 8,
-        paddingRight: 8
-    },
-    //   title: {
-    //     color: '#fff',
-    //   },
-    //   buttonText: {
-    //     color: '#b5b5b5',
-    //   },
-})
-
 
 export class PageFooter extends Component {
     render() {
@@ -117,13 +102,13 @@ class SubNavBar extends Component {
 
         return (
             <View style={[LayerStyles.tarBar, {display: 'flex', flexDirection: 'column'}]}>
-                <NavBar style={navbarStyles}>
+                <View style={styles.myNavBar}>
 
 
                     {hideBackIcon ? null :
                         <Button style={styles.backBtn} size="small" onClick={this.goBack}>
                             {/* <Icon name='chevron-left' size={32} color='#474747' /> */}
-                            <Image source={navLeft} />
+                            <Image source={left} style={{width:80,height: 80}}/>
                         </Button>
                     }
 
@@ -133,7 +118,7 @@ class SubNavBar extends Component {
                     <View style={{flex: 1}}>
                         <View style={{width: '100%', justifyContent: 'center', opacity: this.props.titleOpacity, alignItems: 'center'}}>{
                             (typeof this.props.title === 'string') ?
-                                <Text style={{color: '#474747'}}>{this.props.title}</Text> : this.props.title
+                                <Text style={{color: 'white',fontSize: 20,}}>{this.props.title}</Text> : this.props.title
                         }</View>
                     </View>
 
@@ -143,7 +128,7 @@ class SubNavBar extends Component {
                         ((typeof this.props.right === 'string') ? <Text>this.props.right</Text> : this.props.right) : null
                     }
 
-                </NavBar>
+                </View>
 
                 <View style={{flex: 1, display: 'flex'}}>
                     <View style={[styles.pageContent, {flex: 1}, this.props.contentStyle]}>
@@ -171,40 +156,6 @@ class SubNavBar extends Component {
                     }
                 </View>
             </View>
-            // <div className="layer-page relative">
-            //     <NavBar leftContent="" className={`sub-nav-bar ${tc}`} style={{ position: 'fixed', width: '100%', zIndex: 3, ...style }}
-            //         onLeftClick={this.goBack}
-            //         mode="light"
-            //         icon={hideBackIcon?null:<Icon type="left" />}
-            //         rightContent={
-            //             this.props.right
-            //         }
-            //     ><span style={{display:'flex', width:'100%', justifyContent:'center', opacity: titleOpacity}}>{this.props.title}</span></NavBar>
-            //     <div className={`page-content ${this.props.contentClassName||''} ${tc} ${footer === false ? '' : 'has-footer'}`}>
-            //         {children}
-            //         {
-            //             this.props.overflowLoading && this.props.loading ?
-            //             <div className="relative">
-            //                 <Spinner style={{ position: 'absolute' }} />
-            //             </div>: null
-            //         }
-            //     </div>
-            //     {footer !== false ? (
-            //         <div className="footer-content">
-            //             {footer}
-            //         </div>
-            //     ) : null}
-            //     {this.props.loading ?
-            //         <div className={`page-content ${this.props.contentClassName||''} ${tc}`}  style={{ zIndex: 4, background:'transparent' }}>
-            //             <div className="relative">
-            //                 <Spinner style={{ position: 'absolute' }} />
-            //             </div>
-
-            //         </div> : null
-            //     }
-
-
-            // </div>
         )
     }
 }

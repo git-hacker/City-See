@@ -6,6 +6,8 @@ import { replace } from 'react-router-redux';
 import NavBar from '../components/NavBar'
 import AttentionItem from '../components/attentionItem'
 import Layer, {LayerRouter} from '../components/Layer';
+import SubNavBar from '../components/SubNavBar';
+
 
 const style = StyleSheet.create(
     {
@@ -115,8 +117,7 @@ class HomePage extends Component {
         }
         return (
             <Layer>
-                <View>
-                    <NavBar titleName='我的关注'/>
+                <SubNavBar  title='我的关注'>
                     <View style={{padding: 10, height: '100%'}}>
                         <ListView
                             ref={el => this.lv = el}
@@ -133,7 +134,7 @@ class HomePage extends Component {
                         >
                         </ListView>
                     </View>
-                </View>
+                </SubNavBar>
             </Layer>
         )
     }
