@@ -61,7 +61,7 @@ class SendPage extends Component {
       }
         return (
           <Layer style={{flexDirection: 'column', paddingBottom: 5}}>
-                <SubNavBar title='我' 
+                <SubNavBar title='我' hideBackIcon={true}
                 right={
                   <TouchableOpacity activeOpacity={0.7}  onPress={this.submit} >
                       <View>

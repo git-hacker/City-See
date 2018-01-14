@@ -139,7 +139,7 @@ class HomePage extends Component {
         return (
             <Layer style={IndexPageStyles.content}>
                 <NavBar titleName={this.props.page === 'attention' ? '关注' : '眷城'}/>
-                <View style={{padding: 10, height: '100%'}}>
+                <View style={{paddingLeft:10 ,paddingRight:10,paddingBottom:10, height: '100%'}}>
                     <ScrollView style={{height: 240, width: this.props.page === 'attention' ? '90%' : '100%'}} horizontal>
                     <View style={[IndexPageStyles.topBuilding]}>
                     {

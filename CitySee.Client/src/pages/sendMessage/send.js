@@ -173,7 +173,7 @@ class SendPage extends Component {
         const { files } = this.state;
         return (
             <Layer style={{flexDirection: 'column', paddingBottom: 5}}>
-                <SubNavBar title='分享'
+                <SubNavBar title='分享' hideBackIcon={true}
                 right={this.state.canEdit? 
                   <TouchableOpacity activeOpacity={0.7}  onPress={this.submit} >
                       <View>
