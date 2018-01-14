@@ -39,27 +39,27 @@ namespace BuildingComment.Store
                             LikeNum = cm.LikeNum,
                             UserName = cm.IsAnonymous ? "匿名用户" : c.UserName,
                             CommentFileInfo = from f1 in Context.FileInfos.AsNoTracking()
-                                             join file in Context.CommentImages.AsNoTracking() on f1.FileGuid equals file.FileGuid
-                                             orderby file.CreateTime descending
-                                             where file.CommentId == cm.Id
-                                             select new FileInfo
-                                             {
-                                                 FileGuid = f1.FileGuid,
-                                                 FileExt = f1.FileExt,
-                                                 Uri = f1.Uri,
-                                                 Name = f1.Name,
-                                                 Type = f1.Type,
-                                                 Size = f1.Size,
-                                                 Height = f1.Height,
-                                                 Width = f1.Width,
-                                                 Ext1 = f1.Ext1,
-                                                 Ext2 = f1.Ext2
-                                             }
+                                              join file in Context.CommentImages.AsNoTracking() on f1.FileGuid equals file.FileGuid
+                                              orderby file.CreateTime descending
+                                              where file.CommentId == cm.Id
+                                              select new FileInfo
+                                              {
+                                                  FileGuid = f1.FileGuid,
+                                                  FileExt = f1.FileExt,
+                                                  Uri = f1.Uri,
+                                                  Name = f1.Name,
+                                                  Type = f1.Type,
+                                                  Size = f1.Size,
+                                                  Height = f1.Height,
+                                                  Width = f1.Width,
+                                                  Ext1 = f1.Ext1,
+                                                  Ext2 = f1.Ext2
+                                              }
                         };
             return query;
         }
 
-        public async Task<Comment> CreateAsync(Comment comment,Building building, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<Comment> CreateAsync(Comment comment, Building building, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (comment == null)
             {
@@ -71,6 +71,37 @@ namespace BuildingComment.Store
             entry.Property(x => x.CommentNum).IsModified = true;
             await Context.SaveChangesAsync(cancellationToken);
             return comment;
+        }
+
+
+        public async Task CreateImageAsync(string commentId, string imagePath, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            CommentImages commentImages = new CommentImages();
+            commentImages.CommentId = commentId;
+            commentImages.CreateTime = DateTime.Now;
+            commentImages.FileGuid = Guid.NewGuid().ToString();
+            commentImages.FileType = 1;
+            commentImages.From = "app";
+
+            FileInfo fileInfo = new FileInfo();
+            fileInfo.FileGuid = commentImages.FileGuid;
+            fileInfo.Uri = imagePath;
+            fileInfo.Type = "ORIGINAL";
+            fileInfo.FileExt = "";
+            fileInfo.Height = 0;
+            fileInfo.Size = 0;
+            fileInfo.Width = 0;
+
+            try
+            {
+                Context.Add(commentImages);
+                Context.Add(fileInfo);
+                await Context.SaveChangesAsync(cancellationToken);
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                throw;
+            }
         }
 
         public Task<TResult> GetAsync<TResult>(Func<IQueryable<Comment>, IQueryable<TResult>> query, CancellationToken cancellationToken = default(CancellationToken))

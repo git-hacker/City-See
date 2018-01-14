@@ -133,26 +133,65 @@ class SendPage extends Component {
     } else {
       Toast.fail('上传文件失败: ' + (res.message || ''))
     }
+    render() {
+        const { files } = this.state;
+        return (
+            <Layer style={{flexDirection: 'column', paddingBottom: 5}}>
+                <SubNavBar title='分享' hideBackIcon={true}
+                right={this.state.canEdit? 
+                  <TouchableOpacity activeOpacity={0.7}  onPress={this.submit} >
+                      <View>
+                        <Text style={{color: 'white', fontSize:16}}>发送</Text>
+                      </View>
+                  </TouchableOpacity>
+                      : null}>
+                  
+                    <View style={{marginTop: 5}}>
+                        <TextareaItem
+                          placeholder="一起来分享你的故事吧..."
+                          rows={6}
+                          style={{borderWidth: 0}}
+                          onChange= {this.changeTextArea}
+                        />
+                        <WingBlank style={{marginTop: 15,marginBottom: 10}}>
+                            <ImagePicker
+                                files={files}
+                                onImageClick={(index, fs) => this.deleteFile(index, fs)}
+                                onAddImageClick={this.chooseImage}
+                            />
+                        </WingBlank>
+                    </View>
+                    <CheckboxItem onChange={this.onChange()}>
+                      <Text>匿名</Text>
+                    </CheckboxItem>
+                    <WhiteSpace size='sm' />
+                    <View style={styles.myHouse}>
+                      <View style={{justifyContent: 'flex-start',flexDirection: 'row', alignItems:'center'}}>
+                          <Image source={require('../../images/myHouse.png')}/>
+                          <Text style={{marginLeft: 10}}>所在建筑</Text>
+                      </View>
+                      <View style={{justifyContent: 'flex-end'}}>
+                        <Image source={require('../../images/right.png')} style={{width: 25, height:25}}/>
+                      </View>
+                    </View>
 
-  }
-  deleteFile = (index, files) => {
-    alert('确认', '您确定要删除此图片吗？', [
-      {text: '取消', onPress: () => {}, style: 'default'},
-      {
-        text: '确定', onPress: () => {
-          let fileList = this.state.files
-          fileList.splice(index, 1)
-          this.setState({
-            files: fileList
-          })
-        }
-      },
-    ])
-  }
-  onChangeFile = (files, type, index) => {
-    if (type === 'remove') { // 移除
-      this.deleteFile(index, files)
-      return
+                <Modal
+                    popup
+                    visible={this.state.showPickerSelector}
+                    onClose={() => this.setState({ showPickerSelector: false })}
+                    animationType="slide-up"
+                >
+                    <List >
+                    {['拍照', '从手机相册选择', "取消"].map((i, index) => (
+                        <List.Item onClick={() => this.pickerSelected(index)} key={index}>{i}</List.Item>
+                    ))}
+                    </List>
+                </Modal>
+                </SubNavBar>
+
+
+            </Layer >
+        )
     }
     this._uploadFile(files[files.length - 1], () => {
     })

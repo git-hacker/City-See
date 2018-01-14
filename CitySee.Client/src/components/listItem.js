@@ -48,7 +48,8 @@ const styles = StyleSheet.create(
             paddingRight:3,
             paddingBottom:1,
             alignItems: 'center',
-            justifyContent:'flex-end'
+            position: 'absolute',
+            right:0,
         }
     }
 )
@@ -73,6 +74,7 @@ class ListItem extends Component {
                                 <Text style={{fontSize: 12}}>{rowData.userName}</Text>
                             </View>
                         </View>
+
                         {
                             this.props.page !== 'gz' ? null : 
                             <View style={styles.gz}>

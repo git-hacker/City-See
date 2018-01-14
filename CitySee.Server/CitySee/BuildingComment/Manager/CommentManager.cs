@@ -61,6 +61,8 @@ namespace BuildingComment.Manager
             return _mapper.Map<CommentResponse>(response);
         }
 
+
+
         /// <summary>
         /// 修改评论信息
         /// </summary>
@@ -160,8 +162,9 @@ namespace BuildingComment.Manager
             var result = _icommentStore.GetCommentQuery().Where(x => x.CustomerId == userid);
             response.TotalCount = await result.CountAsync(cancellationToken);
             var query = await result.OrderByDescending(x => x.CreateTime).Skip(condition.PageSize * condition.PageIndex).Take(condition.PageSize).ToListAsync(cancellationToken);
-            
-            query = query.Select(x => {
+
+            query = query.Select(x =>
+            {
                 if (x.CommentFileInfo?.Count() > 0)
                 {
                     var f = x.CommentFileInfo.Select(a => a.FileGuid).Distinct();
@@ -175,7 +178,8 @@ namespace BuildingComment.Manager
                     }
                 }
 
-                return x; }).ToList();
+                return x;
+            }).ToList();
 
 
             response.PageSize = condition.PageSize;
@@ -233,5 +237,17 @@ namespace BuildingComment.Manager
             response.Extension = _mapper.Map<List<CommentResponse>>(query);
             return response;
         }
+
+        /// <summary>
+        /// 图片处理
+        /// </summary>
+        /// <param name="commentId"></param>
+        /// <param name="imagePath"></param>
+        /// <returns></returns>
+        private async Task ImageExcute(string commentId, string imagePath)
+        {
+            await _icommentStore.CreateImageAsync(commentId, imagePath);
+        }
+
     }
 }
