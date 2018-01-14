@@ -1,5 +1,5 @@
 ## City-See
-## License
+
 ### 标签栏
 City-See分为五大功能模块：首页（建筑评论列表）、地标（地图定位展示评论量）、发布（发布对建筑的评论）、关注（感兴趣的建筑的评论列表）、个人中心（消息、足迹）
 
@@ -23,4 +23,5 @@ City-See分为五大功能模块：首页（建筑评论列表）、地标（地
 ![个人中心](https://raw.githubusercontent.com/git-hacker/City-See/master/Product/%E8%AE%BE%E8%AE%A1%E5%9B%BE/%E4%B8%AA%E4%BA%BA%E4%B8%AD%E5%BF%83.png)
 ### 发布
 ![发布](https://raw.githubusercontent.com/git-hacker/City-See/master/Product/%E8%AE%BE%E8%AE%A1%E5%9B%BE/%E5%8F%91%E5%B8%83.png)
+## License
 [WTFPL](https://github.com/PomeloFoundation/Pomelo.EntityFrameworkCore.MySql/blob/master/LICENSE)
