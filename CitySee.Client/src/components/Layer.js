@@ -49,24 +49,11 @@ class Layer extends Component {
 
         return (
             <View style={LayerStyles.tarBar}>
-               
-                    <View style={[LayerStyles.scrollPanel, this.props.style]}>
-
-                        {children}
-
-                    </View>
-                    {router ? router : null}
-                    {this.props.showLoading ? (<Spinner></Spinner>) : null}
-               
-                {/* <View  style={LayerStyles.rel}>
-                    <View style={LayerStyles.panel}>
-                      <ScrollView style={LayerStyles.sv} contentContainerStyle={LayerStyles.svc}>
-                        {children}
-                      </ScrollView>
-                    </View>
-                     {router?router:null}
-                     {this.props.showLoading? (<Spinner></Spinner>):null}
-                </View> */}
+                <View style={[LayerStyles.scrollPanel, this.props.style]}>
+                    {children}
+                </View>
+                {router ? router : null}
+                {this.props.showLoading ? (<Spinner></Spinner>) : null}
             </View>
         )
     }

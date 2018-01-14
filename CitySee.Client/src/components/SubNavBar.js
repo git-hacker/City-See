@@ -54,7 +54,7 @@ const navbarStyles = StyleSheet.create({
 
     },
     navBar: {
-        backgroundColor: '#f3f3f3',
+        backgroundColor: 'red',
         height: 3 * u,
         paddingLeft: 8,
         paddingRight: 8
@@ -116,13 +116,13 @@ class SubNavBar extends Component {
         let hideBackIcon = this.props.hideBackIcon === true;
 
         return (
-            <View style={[LayerStyles.xyhLayer, {display: 'flex', flexDirection: 'column'}]}>
-                <NavBar style={navbarStyles}>
+            <View style={[LayerStyles.tarBar, {display: 'flex', flexDirection: 'column'}]}>
+                <NavBar>
 
 
-                    {hideBackIcon ? null :
+                    {hideBackIcon ? 
+                    <Text>取消</Text> :
                         <Button style={styles.backBtn} size="small" onClick={this.goBack}>
-                            {/* <Icon name='chevron-left' size={32} color='#474747' /> */}
                             <Image source={navLeft} />
                         </Button>
                     }
