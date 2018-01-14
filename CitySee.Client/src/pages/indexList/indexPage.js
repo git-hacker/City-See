@@ -1,6 +1,6 @@
 import React, { Component, Children } from 'react';
 import { List, Modal,ActionSheet } from 'antd-mobile';
-import { Platform, StatusBar, View, ScrollView, Text, StyleSheet, TouchableOpacity, Image, ListView } from 'react-native'
+import { Platform, StatusBar, View, ScrollView, Text, StyleSheet, TouchableOpacity, TouchableWithoutFeedback, Image, ListView } from 'react-native'
 import { connect } from 'react-redux'
 import { replace } from 'react-router-redux';
 import {IndexPageStyles} from './indexPageStyle'
@@ -102,6 +102,13 @@ class HomePage extends Component {
             ]
         }
     }
+    getPath = (path) => {
+        console.log("path:======", `${this.props.match.url}${path}`);
+        return `${this.props.match.url}${path}`
+    }
+    gotoPath = (path, par) => {
+        this.props.dispatch(push(this.getPath(path), par));
+    }
     
     componentDidMount() {
         for (let i = 0; i < 5 ; i++) {
@@ -125,7 +132,7 @@ class HomePage extends Component {
     render() {
         const row = (rowData, sectionID, rowID) => {
             return <View style={style.main}>
-                      <ListItem item={rowData}  onClick={() => this.gotoDetail(rowData)} />
+                      <ListItem item={rowData} onClick={() => {this.gotoPath('Details', rowData)}} />
                       <Comment/>
                    </View>
         }
@@ -146,9 +153,12 @@ class HomePage extends Component {
                     </ScrollView>
                     {
                         this.props.page === 'attention' ?
-                        <View style={style.right}>
-                            <Image style={{height:30, width: 30}} source={require('../../images/right_b.png')}/>
-                        </View>
+                        <TouchableWithoutFeedback onPress={() => {this.gotoPath('Attention')}}>
+                            <View style={style.right}>
+                                <Image style={{height:30, width: 30}} source={require('../../images/right_b.png')}/>
+                            </View>
+                        </TouchableWithoutFeedback>
+                        
                         :
                         null
                     }
