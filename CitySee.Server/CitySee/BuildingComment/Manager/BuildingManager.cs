@@ -44,6 +44,7 @@ namespace BuildingComment.Manager
             return _mapper.Map<BuildingResponse>(response);
         }
 
+
         /// <summary>
         /// 查询楼盘信息
         /// </summary>

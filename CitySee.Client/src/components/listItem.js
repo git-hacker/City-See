@@ -9,7 +9,8 @@ const styles = StyleSheet.create(
         },
         header: {
             display: 'flex',
-            flexDirection: 'row'
+            flexDirection: 'row',
+            alignItems:'center',
         },
         headerRight: {
             display: 'flex',
@@ -34,6 +35,21 @@ const styles = StyleSheet.create(
         content: {
             marginTop: 5,
             marginBottom: 5
+        },
+        gz: {
+            display: 'flex',
+            borderStyle: 'solid',
+            borderColor: '#f94771',
+            borderWidth: 1,
+            borderRadius: 5,
+            flexDirection: 'row',
+            height: 21,
+            paddingLeft: 3,
+            paddingRight:3,
+            paddingBottom:1,
+            alignItems: 'center',
+            position: 'absolute',
+            right:0,
         }
     }
 )
@@ -47,7 +63,9 @@ class ListItem extends Component {
             <TouchableWithoutFeedback onPress={this.props.onClick}>
                 <View style={styles.main}>
                     <View style={styles.header}>
+
                         <Image style={styles.icon} source={{uri: rowData.icon}} />
+
                         <View style={styles.headerRight}>
                             <Text style={{color: '#f94771', fontSize: 16}}>{rowData.name}</Text>
                             <View style={{display: 'flex', flexDirection: 'row'}}>
@@ -56,6 +74,14 @@ class ListItem extends Component {
                                 <Text style={{fontSize: 12}}>{rowData.userName}</Text>
                             </View>
                         </View>
+
+                        {
+                            this.props.page !== 'gz' ? null : 
+                            <View style={styles.gz}>
+                                <Image source={require('../images/add.png')} style={{width:20,height: 20}}/>
+                                <Text style={{color: '#f94771'}}>关注</Text>
+                            </View>
+                        }
                     </View>
                     <Text style={styles.content}>{rowData.content}</Text>
                     <View style={styles.imgs}>
