@@ -38,7 +38,6 @@ namespace CitySee.Core.Filters
                     Id = identity.FindFirst("sub")?.Value,
                     UserName = identity.FindFirst("name")?.Value
                 };
-                //}
                 if (user == null)
                 {
                     context.Result = new ContentResult()
