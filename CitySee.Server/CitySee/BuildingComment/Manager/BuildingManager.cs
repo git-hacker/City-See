@@ -44,6 +44,12 @@ namespace BuildingComment.Manager
             return _mapper.Map<BuildingResponse>(response);
         }
 
+        private async Task ImageExcute(string imagePath)
+        {
+
+        }
+
+
         /// <summary>
         /// 查询楼盘信息
         /// </summary>
