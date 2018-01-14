@@ -1,21 +1,21 @@
 import {handleActions} from 'redux-actions';
 import * as actionTypes from '../constants/actionTypes';
-import {refreshToken, checkWxJSSDKConfig} from '../actions/actionCreators'
+import {refreshToken, checkWxJSSDKConfig} from '../constants/actionCreator'
 import {store} from '../index'
 
 const authid = "openid_auth";
-const authStr = sessionStorage.getItem(authid);
-let storeUser = null;
-if (authStr) {
-    storeUser = JSON.parse(authStr);
-    //alert(authStr);
-} else {
-    //alert(document.cookie)
-}
+// const authStr = sessionStorage.getItem(authid);
+// let storeUser = null;
+// if (authStr) {
+//     storeUser = JSON.parse(authStr);
+//     //alert(authStr);
+// } else {
+//     //alert(document.cookie)
+// }
 
-window.setInterval(() => {
-    store.dispatch(checkWxJSSDKConfig());
-}, 1000 * 60 * 10)
+// window.setInterval(() => {
+//     store.dispatch(checkWxJSSDKConfig());
+// }, 1000 * 60 * 10)
 
 
 const initState = {
@@ -27,19 +27,26 @@ let now = Math.round(new Date().valueOf() / 1000);
 let reducerMap = {};
 //
 reducerMap[actionTypes.LOGIN_AUTHOR_COMPLETE] = function (state, action) {
-
-    sessionStorage.setItem(authid, JSON.stringify(action.payload))
+    storage.save({
+        key: authid,
+        data: action.payload,
+        expires: action.payload.expires_in * 1000
+    })
     if (tid) {
         window.clearTimeout(tid);
     }
-    let time = ((action.payload.expires_in - now) / 2) * 1000;
-    tid = window.setTimeout(() => {
-        store.dispatch(refreshToken());
-    }, time)
+    let now = Math.round(new Date().valueOf() / 1000);
+    let time = ((action.payload.expires_to - now) / 2) * 1000;
+    global.userInfo = action.payload.userInfo;
+    // tid = window.setTimeout(()=>{
+    //     store.dispatch(refreshToken());
+    // }, time)
     return Object.assign({}, state, {user: action.payload, hasAuthority: true});
+
+    
 }
 
-authReducerMap[actionTypes.TOKEN_UPDATED] = (state, action) => {
+reducerMap[actionTypes.TOKEN_UPDATED] = (state, action) => {
     let token = action.payload;
     if (token && token.access_token) {
         let now = Math.round(new Date().valueOf() / 1000);

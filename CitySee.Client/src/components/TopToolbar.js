@@ -8,7 +8,7 @@ import { replace } from 'react-router-redux';
 import LayerStyles from './LayerStyle';
 import MapIndex from '../map'
 import IndexPage from '../pages/indexList/indexPage'
-// import SendIndex from '../pages/sendMessage/send'
+import SendIndex from '../pages/sendMessage/send'
 
 let sbHeight = StatusBar.currentHeight;
 if (Platform.OS === 'android' && (Platform.Version * 1) <= 20) {
@@ -62,7 +62,7 @@ class TopToolbar extends Component {
                         icon={require('../images/send2.png')}
                         selectedIcon={require('../images/send2.png')}
                         selected={this.state.selectedTab === 'send'} onPress={() => this.changeTab('send')}>
-                        {/* <SendIndex actived={this.state.selectedTab === 'send'} match={this.props.match}/> */}
+                        <SendIndex actived={this.state.selectedTab === 'send'} match={this.props.match}/>
                     </TabBar.Item>
                     <TabBar.Item title="关注"
                         iconStyle={{width:25,height:25}}
