@@ -44,27 +44,30 @@ class ListItem extends Component {
         const rowData = this.props.item||{};
         const imgs = rowData.imgs || []
         return (
-            <View style={styles.main}>
-                <View style={styles.header}>
-                    <Image style={styles.icon} source={{uri: rowData.icon}} />
-                    <View style={styles.headerRight}>
-                        <Text style={{color: '#f94771', fontSize: 16}}>{rowData.name}</Text>
-                        <View style={{display: 'flex', flexDirection: 'row'}}>
-                            <Text style={{fontSize: 12}}>{rowData.time}</Text>
-                            <Text style={{marginLeft: 10,marginRight: 8, fontSize: 12}}>来自</Text>
-                            <Text style={{fontSize: 12}}>{rowData.userName}</Text>
+            <TouchableWithoutFeedback onPress={this.props.onClick}>
+                <View style={styles.main}>
+                    <View style={styles.header}>
+                        <Image style={styles.icon} source={{uri: rowData.icon}} />
+                        <View style={styles.headerRight}>
+                            <Text style={{color: '#f94771', fontSize: 16}}>{rowData.name}</Text>
+                            <View style={{display: 'flex', flexDirection: 'row'}}>
+                                <Text style={{fontSize: 12}}>{rowData.time}</Text>
+                                <Text style={{marginLeft: 10,marginRight: 8, fontSize: 12}}>来自</Text>
+                                <Text style={{fontSize: 12}}>{rowData.userName}</Text>
+                            </View>
                         </View>
                     </View>
+                    <Text style={styles.content}>{rowData.content}</Text>
+                    <View style={styles.imgs}>
+                        {
+                            imgs.map((v,i) => {
+                                return <Image key={i} style={styles.img} source={{uri: v}} />
+                            })
+                        }
+                    </View>
                 </View>
-                <Text style={styles.content}>{rowData.content}</Text>
-                <View style={styles.imgs}>
-                    {
-                        imgs.map((v,i) => {
-                            return <Image key={i} style={styles.img} source={{uri: v}} />
-                        })
-                    }
-                </View>
-            </View>
+            </TouchableWithoutFeedback>
+            
         )
     }
 }

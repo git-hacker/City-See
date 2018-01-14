@@ -13,6 +13,7 @@ import ignoreSubspaceMiddleware from './ignoreSubspaceMiddleware'
 import {createStore} from 'redux-dynamic-reducer'
 import rootReducer from './reducers';
 import LoginPage from './pages/login/login';
+import Attention from './attention'
 import Toolbar from './components/TopToolbar'
 import {composeWithDevTools} from 'redux-devtools-extension';
 import runSaga from './saga'
@@ -20,6 +21,7 @@ import HomePage from './pages/indexList/indexPage'
 // import {tools,ToolComponent} from './tools';
 import RegisterPage from './pages/login/register';
 import ForgetPwdPage from './pages/login/forgetPwd';
+import Details from './pages/indexList/details'
 
 const history = createHistory();
 
@@ -140,6 +142,8 @@ class IndexPage extends Component {
             <Route path={'/RegisterPage'} component={RegisterPage} />
             <Route path={'/ForgetPwdPage'} component={ForgetPwdPage} />
             <Route path={'/LoginPage'} component={LoginPage} />
+            <Route path={'/Attention'} component={Attention} />
+            <Route path={'/Details'} component={Details} />
           </Layer>
         </ConnectedRouter>
       </Provider >

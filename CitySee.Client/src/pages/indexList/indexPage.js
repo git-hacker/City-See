@@ -1,6 +1,6 @@
 import React, { Component, Children } from 'react';
 import { List, Modal,ActionSheet } from 'antd-mobile';
-import { Platform, StatusBar, View, ScrollView, Text, StyleSheet, TouchableOpacity, Image, ListView } from 'react-native'
+import { Platform, StatusBar, View, ScrollView, Text, StyleSheet, TouchableOpacity, TouchableWithoutFeedback, Image, ListView } from 'react-native'
 import { connect } from 'react-redux'
 import { replace } from 'react-router-redux';
 import {IndexPageStyles} from './indexPageStyle'
@@ -9,6 +9,12 @@ import ProjectItem from '../../components/ProjectItem'
 import TabBar from '../../components/TopToolbar'
 import ListItem from '../../components/listItem'
 import Comment from '../../components/Comment'
+import {Route} from 'react-router';
+import {goBack} from 'react-router-redux'
+import {push} from 'react-router-redux';
+import Layer, {LayerRouter} from '../../components/Layer';
+// import Attention from '../../attention'
+
 
 const style = StyleSheet.create(
     {
@@ -96,6 +102,13 @@ class HomePage extends Component {
             ]
         }
     }
+    getPath = (path) => {
+        console.log("path:======", `${this.props.match.url}${path}`);
+        return `${this.props.match.url}${path}`
+    }
+    gotoPath = (path, par) => {
+        this.props.dispatch(push(this.getPath(path), par));
+    }
     
     componentDidMount() {
         for (let i = 0; i < 5 ; i++) {
@@ -119,12 +132,12 @@ class HomePage extends Component {
     render() {
         const row = (rowData, sectionID, rowID) => {
             return <View style={style.main}>
-                      <ListItem item={rowData}  onClick={() => this.gotoDetail(rowData)} />
+                      <ListItem item={rowData} onClick={() => {this.gotoPath('Details', rowData)}} />
                       <Comment/>
                    </View>
         }
         return (
-            <View style={IndexPageStyles.content}>
+            <Layer style={IndexPageStyles.content}>
                 <NavBar titleName={this.props.page === 'attention' ? '关注' : '眷城'}/>
                 <View style={{padding: 10, height: '100%'}}>
                     <ScrollView style={{height: 240, width: this.props.page === 'attention' ? '90%' : '100%'}} horizontal>
@@ -140,9 +153,12 @@ class HomePage extends Component {
                     </ScrollView>
                     {
                         this.props.page === 'attention' ?
-                        <View style={style.right}>
-                            <Image style={{height:30, width: 30}} source={require('../../images/right_b.png')}/>
-                        </View>
+                        <TouchableWithoutFeedback onPress={() => {this.gotoPath('Attention')}}>
+                            <View style={style.right}>
+                                <Image style={{height:30, width: 30}} source={require('../../images/right_b.png')}/>
+                            </View>
+                        </TouchableWithoutFeedback>
+                        
                         :
                         null
                     }
@@ -162,10 +178,10 @@ class HomePage extends Component {
                     >
                     </ListView>
                 </View>
-                
-                
-            </View>
- 
+                {/* <LayerRouter>
+                    <Route path={this.getPath('Attention')} component={Attention} />
+                </LayerRouter> */}
+            </Layer>
         )
     }
 }
