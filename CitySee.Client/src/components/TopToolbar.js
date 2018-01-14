@@ -8,6 +8,8 @@ import { replace } from 'react-router-redux';
 import LayerStyles from './LayerStyle';
 import MapIndex from '../map'
 import IndexPage from '../pages/indexList/indexPage'
+import {getBuildList} from '../actions/index'
+// import SendIndex from '../pages/sendMessage/send'
 import SendIndex from '../pages/sendMessage/send'
 import PersonIndex from '../pages/my'
 let sbHeight = StatusBar.currentHeight;
@@ -28,7 +30,7 @@ class TopToolbar extends Component {
     }
 
     componentDidMount() {
-        
+        this.props.getBuildList()
     }
 
     changeTab = (tab) => {
@@ -78,9 +80,7 @@ class TopToolbar extends Component {
                         selected={this.state.selectedTab === 'my'} onPress={() => this.changeTab('my')}>
                         <PersonIndex actived={this.state.selectedTab === 'my'} match={this.props.match}/>
                     </TabBar.Item>
-
                 </TabBar>
-
 </View>
         
               
@@ -97,7 +97,8 @@ const mapStateToProps = (state, action) => {
 }
 const mapDispatchToProps = (dispatch) => {
     return {
-        dispatch
+        dispatch,
+        getBuildList: (...args) => dispatch(getBuildList(...args))
     }
 }
 
