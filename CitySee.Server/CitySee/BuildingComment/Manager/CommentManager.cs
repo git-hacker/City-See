@@ -2,6 +2,7 @@
 using BuildingComment.Dto.Common;
 using BuildingComment.Dto.Request;
 using BuildingComment.Dto.Response;
+using BuildingComment.Help;
 using BuildingComment.Model;
 using BuildingComment.Store;
 using CitySee.Core;
@@ -34,20 +35,26 @@ namespace BuildingComment.Manager
         /// <summary>
         /// 新增评论信息
         /// </summary>
-        /// <param name="user">创建者</param>
+        /// <param name="userid">创建者</param>
         /// <param name="commentRequest">请求实体</param>
         /// <param name="cancellationToken">验证</param>
         /// <returns></returns>
-        public virtual async Task<CommentResponse> CreateAsync(CommentRequest commentRequest, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual async Task<CommentResponse> CreateAsync(string userid, CommentRequest commentRequest, CancellationToken cancellationToken = default(CancellationToken))
         {
             var comment = _mapper.Map<Comment>(commentRequest);
+
+            FilterHelper filter = new FilterHelper(@"C:\Users\Administrator\Desktop\新建文本文档.txt");   //存放敏感词的文档  
+            filter.SourctText = commentRequest.Content;
+            commentRequest.Content = filter.Filter('*');
+
+
             comment.Id = Guid.NewGuid().ToString();
             comment.CreateTime = DateTime.Now;
+            comment.CustomerId = userid;
             if (comment.UpId == "0")
                 comment.FirstId = comment.Id;
             else
                 comment.FirstId = (await _icommentStore.GetAsync(a => a.Where(y => y.Id == comment.UpId))).FirstId;
-            //这里有customerid
             var response = await _icommentStore.CreateAsync(comment, cancellationToken);
             return _mapper.Map<CommentResponse>(response);
         }
@@ -55,63 +62,58 @@ namespace BuildingComment.Manager
         /// <summary>
         /// 修改评论信息
         /// </summary>
-        /// <param name="user">创建者</param>
+        /// <param name="userid">创建者</param>
         /// <param name="commentRequest">请求实体</param>
         /// <param name="cancellationToken">验证</param>
         /// <returns></returns>
-        public virtual async Task UpdateAsync(CommentRequest commentRequest, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual async Task UpdateAsync(string userid, CommentRequest commentRequest, CancellationToken cancellationToken = default(CancellationToken))
         {
-            //这里有customerid
-            var oldcommen = await _icommentStore.GetAsync(a => a.Where(b => b.Id == commentRequest.Id), cancellationToken);
+            var oldcommen = await _icommentStore.GetAsync(a => a.Where(b => b.Id == commentRequest.Id && b.CustomerId == userid), cancellationToken);
             if (oldcommen == null)
                 return;
             oldcommen.Content = commentRequest.Content;
-
-
             await _icommentStore.UpdateAsync(oldcommen, cancellationToken);
         }
 
         /// <summary>
         /// 删除评论信息
         /// </summary>
-        /// <param name="user">创建者</param>
+        /// <param name="userid">创建者</param>
         /// <param name="ids">数据id集</param>
         /// <param name="cancellationToken">验证</param>
         /// <returns></returns>
-        public virtual async Task DeleteAsync(List<string> ids, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual async Task DeleteAsync(string userid, List<string> ids, CancellationToken cancellationToken = default(CancellationToken))
         {
-            //这里面有customerid做验证
-            var response = await _icommentStore.ListAsync(a => a.Where(b => ids.Contains(b.Id)));
+            var response = await _icommentStore.ListAsync(a => a.Where(b => ids.Contains(b.Id) && b.CustomerId == userid));
             await _icommentStore.DeleteListAsync(response, cancellationToken);
         }
 
         /// <summary>
-        /// 验证是否能够取消点赞
+        /// 验证点赞
         /// </summary>
+        /// <param name="userid"></param>
         /// <param name="id">评论ID</param>
         /// <param name="cancellationToken">验证</param>
         /// <returns></returns>
-        public virtual async Task<bool> ValCancelGiveLike(string id, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual async Task<bool> ValGiveLike(string userid, string id, CancellationToken cancellationToken = default(CancellationToken))
         {
-            //这里面有customerid做验证
-            var query = await _igiveLikeStore.GetAsync(a => a.Where(b => b.Id == id));
+            var query = await _igiveLikeStore.GetAsync(a => a.Where(b => b.Id == id && b.CustomerId == userid));
             return query != null;
         }
 
         /// <summary>
         /// 点赞
         /// </summary>
-        /// <param name="user">创建者</param>
+        /// <param name="userid">创建者</param>
         /// <param name="id">评论ID</param>
         /// <param name="cancellationToken">验证</param>
         /// <returns></returns>
-        public virtual async Task CreateGiveLikeAsync(string id, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual async Task CreateGiveLikeAsync(string userid, string id, CancellationToken cancellationToken = default(CancellationToken))
         {
             var like = new GiveLike();
             like.Id = id;
             like.CreateTime = DateTime.Now;
-            //这里有customerid
-
+            like.CustomerId = userid;
             await _igiveLikeStore.CreateAsync(like, cancellationToken);
         }
 
@@ -149,15 +151,14 @@ namespace BuildingComment.Manager
         /// <summary>
         /// 根据评论ID获取评论详情
         /// </summary>
-        /// <param name="user">创建者</param>
         /// <param name="id">请求实体</param>
         /// <param name="condition"></param>
         /// <param name="cancellationToken">验证</param>
         /// <returns></returns>
-        public virtual async Task<List<CommentResponse>> ListByIdAsync(string id, PageCondition condition, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual async Task<List<CommentDetailResponse>> ListByIdAsync(string id, PageCondition condition, CancellationToken cancellationToken = default(CancellationToken))
         {
             var request = await _icommentStore.GetCommentDetail().Where(x => x.FirstId == id).ToListAsync(cancellationToken);
-            return _mapper.Map<List<CommentResponse>>(request);
+            return _mapper.Map<List<CommentDetailResponse>>(request);
         }
     }
 }

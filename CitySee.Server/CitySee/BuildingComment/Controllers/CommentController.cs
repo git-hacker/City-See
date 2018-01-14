@@ -1,4 +1,5 @@
 ﻿using AuthorizationCenter.Controllers;
+using AspNet.Security.OAuth.Validation;
 using AutoMapper;
 using BuildingComment.Dto.Common;
 using BuildingComment.Dto.Request;
@@ -12,10 +13,13 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using CitySee.Core.Filters;
+using CitySee.Core.Model;
+using Microsoft.Extensions.Logging;
 
 namespace BuildingComment.Controllers
 {
-    //[Authorize(AuthenticationSchemes = OAuthValidationDefaults.AuthenticationScheme)]
+    [Authorize(AuthenticationSchemes = OAuthValidationDefaults.AuthenticationScheme)]
     [Produces("application/json")]
     [Route("api/comment")]
     public class CommentController : BaseController<CommentController>
@@ -43,26 +47,26 @@ namespace BuildingComment.Controllers
         /// <param name="commentRequest"></param>
         /// <returns></returns>
         [HttpPost("addcomment")]
-        //[TypeFilter(typeof(CheckPermission), Arguments = new object[] { "" })]
-        public async Task<ResponseMessage<CommentResponse>> CreateComment(/*UserInfo user,*/ [FromBody] CommentRequest commentRequest)
+        [CheckPermission]
+        public async Task<ResponseMessage<CommentResponse>> CreateComment(UserInfo user, [FromBody] CommentRequest commentRequest)
         {
             ResponseMessage<CommentResponse> response = new ResponseMessage<CommentResponse>();
             if (!ModelState.IsValid)
             {
                 response.Code = ResponseCodeDefines.ModelStateInvalid;
                 response.Message = ModelState.GetAllErrors();
-                //Logger.Warn($"用户{user?.UserName ?? ""}({user?.Id ?? ""})认领客户(ClaimCustomer)模型验证失败：\r\n{response.Message ?? ""}，\r\n请求参数为：\r\n" + (customerPoolClaimRequest != null ? JsonHelper.ToJson(customerPoolClaimRequest) : ""));
+                Logger.LogWarning($"用户{user?.UserName ?? ""}({user?.Id ?? ""})新增评论(CreateComment)模型验证失败：\r\n{response.Message ?? ""}，\r\n请求参数为：\r\n" + (commentRequest != null ? JsonHelper.ToJson(commentRequest) : ""));
                 return response;
             }
             try
             {
-                response.Extension = await _commentManager.CreateAsync(commentRequest, HttpContext.RequestAborted);
+                response.Extension = await _commentManager.CreateAsync(user.Id, commentRequest, HttpContext.RequestAborted);
             }
             catch (Exception e)
             {
                 response.Code = ResponseCodeDefines.ServiceError;
                 response.Message = e.Message;
-                //Logger.Error($"用户{user?.UserName ?? ""}({user?.Id ?? ""})认领客户(ClaimCustomer)请求失败：\r\n{response.Message ?? ""}，\r\n请求参数为：\r\n" + (customerPoolClaimRequest != null ? JsonHelper.ToJson(customerPoolClaimRequest) : ""));
+                Logger.LogError($"用户{user?.UserName ?? ""}({user?.Id ?? ""})新增评论(CreateComment)请求失败：\r\n{response.Message ?? ""}，\r\n请求参数为：\r\n" + (commentRequest != null ? JsonHelper.ToJson(commentRequest) : ""));
             }
             return response;
         }
@@ -74,26 +78,26 @@ namespace BuildingComment.Controllers
         /// <param name="commentRequest"></param>
         /// <returns></returns>
         [HttpPut("updatecomment")]
-        //[TypeFilter(typeof(CheckPermission), Arguments = new object[] { "" })]
-        public async Task<ResponseMessage> UpdateComment(/*UserInfo user,*/ [FromBody] CommentRequest commentRequest)
+        [CheckPermission]
+        public async Task<ResponseMessage> UpdateComment(UserInfo user, [FromBody] CommentRequest commentRequest)
         {
             ResponseMessage<CommentResponse> response = new ResponseMessage<CommentResponse>();
             if (!ModelState.IsValid)
             {
                 response.Code = ResponseCodeDefines.ModelStateInvalid;
                 response.Message = ModelState.GetAllErrors();
-                //Logger.Warn($"用户{user?.UserName ?? ""}({user?.Id ?? ""})认领客户(ClaimCustomer)模型验证失败：\r\n{response.Message ?? ""}，\r\n请求参数为：\r\n" + (customerPoolClaimRequest != null ? JsonHelper.ToJson(customerPoolClaimRequest) : ""));
+                Logger.LogWarning($"用户{user?.UserName ?? ""}({user?.Id ?? ""})修改评论(UpdateComment)模型验证失败：\r\n{response.Message ?? ""}，\r\n请求参数为：\r\n" + (commentRequest != null ? JsonHelper.ToJson(commentRequest) : ""));
                 return response;
             }
             try
             {
-                await _commentManager.UpdateAsync(commentRequest, HttpContext.RequestAborted);
+                await _commentManager.UpdateAsync(user.Id, commentRequest, HttpContext.RequestAborted);
             }
             catch (Exception e)
             {
                 response.Code = ResponseCodeDefines.ServiceError;
                 response.Message = e.Message;
-                //Logger.Error($"用户{user?.UserName ?? ""}({user?.Id ?? ""})认领客户(ClaimCustomer)请求失败：\r\n{response.Message ?? ""}，\r\n请求参数为：\r\n" + (customerPoolClaimRequest != null ? JsonHelper.ToJson(customerPoolClaimRequest) : ""));
+                Logger.LogError($"用户{user?.UserName ?? ""}({user?.Id ?? ""})修改评论(UpdateComment)请求失败：\r\n{response.Message ?? ""}，\r\n请求参数为：\r\n" + (commentRequest != null ? JsonHelper.ToJson(commentRequest) : ""));
             }
             return response;
         }
@@ -102,29 +106,29 @@ namespace BuildingComment.Controllers
         /// 删除评论
         /// </summary>
         /// <param name="user"></param>
-        /// <param name="commentRequest"></param>
+        /// <param name="ids"></param>
         /// <returns></returns>
         [HttpDelete("updatecomment")]
-        //[TypeFilter(typeof(CheckPermission), Arguments = new object[] { "" })]
-        public async Task<ResponseMessage> UpdateComment(/*UserInfo user,*/ [FromBody] List<string> ids)
+        [CheckPermission]
+        public async Task<ResponseMessage> DeleteComment(UserInfo user, [FromBody] List<string> ids)
         {
             ResponseMessage<CommentResponse> response = new ResponseMessage<CommentResponse>();
-            if (!ModelState.IsValid)
+            if (ids == null)
             {
                 response.Code = ResponseCodeDefines.ModelStateInvalid;
-                response.Message = ModelState.GetAllErrors();
-                //Logger.Warn($"用户{user?.UserName ?? ""}({user?.Id ?? ""})认领客户(ClaimCustomer)模型验证失败：\r\n{response.Message ?? ""}，\r\n请求参数为：\r\n" + (customerPoolClaimRequest != null ? JsonHelper.ToJson(customerPoolClaimRequest) : ""));
+                response.Message = "数值不能为空";
+                Logger.LogWarning($"用户{user?.UserName ?? ""}({user?.Id ?? ""})删除评论(DeleteComment)模型验证失败：\r\n{response.Message ?? ""}，\r\n请求参数为：\r\n" + (ids != null ? JsonHelper.ToJson(ids) : ""));
                 return response;
             }
             try
             {
-                await _commentManager.DeleteAsync(ids, HttpContext.RequestAborted);
+                await _commentManager.DeleteAsync(user.Id, ids, HttpContext.RequestAborted);
             }
             catch (Exception e)
             {
                 response.Code = ResponseCodeDefines.ServiceError;
                 response.Message = e.Message;
-                //Logger.Error($"用户{user?.UserName ?? ""}({user?.Id ?? ""})认领客户(ClaimCustomer)请求失败：\r\n{response.Message ?? ""}，\r\n请求参数为：\r\n" + (customerPoolClaimRequest != null ? JsonHelper.ToJson(customerPoolClaimRequest) : ""));
+                Logger.LogError($"用户{user?.UserName ?? ""}({user?.Id ?? ""})删除评论(DeleteComment)请求失败：\r\n{response.Message ?? ""}，\r\n请求参数为：\r\n" + (ids != null ? JsonHelper.ToJson(ids) : ""));
             }
             return response;
         }
@@ -136,26 +140,27 @@ namespace BuildingComment.Controllers
         /// <param name="id">评论Id</param>
         /// <returns></returns>
         [HttpPost("givelike/{id}")]
-        //[TypeFilter(typeof(CheckPermission), Arguments = new object[] { "" })]
-        public async Task<ResponseMessage> GiveLike(/*UserInfo user,*/ [FromRoute] string id)
+        [CheckPermission]
+        public async Task<ResponseMessage> GiveLike(UserInfo user, [FromRoute] string id)
         {
             ResponseMessage<CommentResponse> response = new ResponseMessage<CommentResponse>();
             if (!ModelState.IsValid)
             {
                 response.Code = ResponseCodeDefines.ModelStateInvalid;
                 response.Message = ModelState.GetAllErrors();
-                //Logger.Warn($"用户{user?.UserName ?? ""}({user?.Id ?? ""})认领客户(ClaimCustomer)模型验证失败：\r\n{response.Message ?? ""}，\r\n请求参数为：\r\n" + (customerPoolClaimRequest != null ? JsonHelper.ToJson(customerPoolClaimRequest) : ""));
+                Logger.LogWarning($"用户{user?.UserName ?? ""}({user?.Id ?? ""})点赞(GiveLike)模型验证失败：\r\n{response.Message ?? ""}，\r\n请求参数为：\r\n(id){id ?? ""}");
                 return response;
             }
             try
             {
-                await _commentManager.CreateGiveLikeAsync(id, HttpContext.RequestAborted);
+                if (!await _commentManager.ValGiveLike(user.Id, id))
+                    await _commentManager.CreateGiveLikeAsync(user.Id, id, HttpContext.RequestAborted);
             }
             catch (Exception e)
             {
                 response.Code = ResponseCodeDefines.ServiceError;
                 response.Message = e.Message;
-                //Logger.Error($"用户{user?.UserName ?? ""}({user?.Id ?? ""})认领客户(ClaimCustomer)请求失败：\r\n{response.Message ?? ""}，\r\n请求参数为：\r\n" + (customerPoolClaimRequest != null ? JsonHelper.ToJson(customerPoolClaimRequest) : ""));
+                Logger.LogError($"用户{user?.UserName ?? ""}({user?.Id ?? ""})点赞(GiveLike)请求失败：\r\n{response.Message ?? ""}，\r\n请求参数为：\r\n(id){id ?? ""}");
             }
             return response;
         }
@@ -167,20 +172,20 @@ namespace BuildingComment.Controllers
         /// <param name="id">评论Id</param>
         /// <returns></returns>
         [HttpDelete("cancelgivelike/{id}")]
-        //[TypeFilter(typeof(CheckPermission), Arguments = new object[] { "" })]
-        public async Task<ResponseMessage> CancelGiveLike(/*UserInfo user,*/ [FromRoute] string id)
+        [CheckPermission]
+        public async Task<ResponseMessage> CancelGiveLike(UserInfo user, [FromRoute] string id)
         {
             ResponseMessage<CommentResponse> response = new ResponseMessage<CommentResponse>();
             if (!ModelState.IsValid)
             {
                 response.Code = ResponseCodeDefines.ModelStateInvalid;
                 response.Message = ModelState.GetAllErrors();
-                //Logger.Warn($"用户{user?.UserName ?? ""}({user?.Id ?? ""})认领客户(ClaimCustomer)模型验证失败：\r\n{response.Message ?? ""}，\r\n请求参数为：\r\n" + (customerPoolClaimRequest != null ? JsonHelper.ToJson(customerPoolClaimRequest) : ""));
+                Logger.LogWarning($"用户{user?.UserName ?? ""}({user?.Id ?? ""})取消点赞(CancelGiveLike)模型验证失败：\r\n{response.Message ?? ""}，\r\n请求参数为：\r\n(id){id ?? ""}");
                 return response;
             }
             try
             {
-                if (await _commentManager.ValCancelGiveLike(id))
+                if (await _commentManager.ValGiveLike(user.Id, id))
                     await _commentManager.CancelGiveLikeAsync(id, HttpContext.RequestAborted);
                 else
                 {
@@ -192,7 +197,7 @@ namespace BuildingComment.Controllers
             {
                 response.Code = ResponseCodeDefines.ServiceError;
                 response.Message = e.Message;
-                //Logger.Error($"用户{user?.UserName ?? ""}({user?.Id ?? ""})认领客户(ClaimCustomer)请求失败：\r\n{response.Message ?? ""}，\r\n请求参数为：\r\n" + (customerPoolClaimRequest != null ? JsonHelper.ToJson(customerPoolClaimRequest) : ""));
+                Logger.LogError($"用户{user?.UserName ?? ""}({user?.Id ?? ""})取消点赞(CancelGiveLike)请求失败：\r\n{response.Message ?? ""}，\r\n请求参数为：\r\n(id){id ?? ""}");
             }
             return response;
         }
@@ -200,19 +205,20 @@ namespace BuildingComment.Controllers
         /// <summary>
         /// 根据楼盘获取评论列表
         /// </summary>
+        /// <param name="user"></param>
         /// <param name="buildingid"></param>
         /// <param name="condition"></param>
         /// <returns></returns>
         [HttpPost("list/{buildingid}")]
-        //[TypeFilter(typeof(CheckPermission), Arguments = new object[] { "" })]
-        public async Task<PagingResponseMessage<CommentResponse>> GetListByBuildingId([FromRoute] string buildingid, [FromForm]PageCondition condition)
+        [CheckPermission]
+        public async Task<PagingResponseMessage<CommentResponse>> GetListByBuildingId(UserInfo user, [FromRoute] string buildingid, [FromBody]PageCondition condition)
         {
             var response = new PagingResponseMessage<CommentResponse>();
             if (!ModelState.IsValid && string.IsNullOrEmpty(buildingid))
             {
                 response.Code = ResponseCodeDefines.ModelStateInvalid;
                 response.Message = ModelState.GetAllErrors();
-                //Logger.Warn($"用户{user?.UserName ?? ""}({user?.Id ?? ""})认领客户(ClaimCustomer)模型验证失败：\r\n{response.Message ?? ""}，\r\n请求参数为：\r\n" + (customerPoolClaimRequest != null ? JsonHelper.ToJson(customerPoolClaimRequest) : ""));
+                Logger.LogWarning($"用户{user?.UserName ?? ""}({user?.Id ?? ""})根据楼盘获取评论列表(GetListByBuildingId)模型验证失败：\r\n{response.Message ?? ""}，\r\n请求参数为：\r\n(buildingid){buildingid ?? ""}，\r\n请求参数为：\r\n" + (condition != null ? JsonHelper.ToJson(condition) : ""));
                 return response;
             }
             try
@@ -223,7 +229,7 @@ namespace BuildingComment.Controllers
             {
                 response.Code = ResponseCodeDefines.ServiceError;
                 response.Message = e.Message;
-                //Logger.Error($"用户{user?.UserName ?? ""}({user?.Id ?? ""})认领客户(ClaimCustomer)请求失败：\r\n{response.Message ?? ""}，\r\n请求参数为：\r\n" + (customerPoolClaimRequest != null ? JsonHelper.ToJson(customerPoolClaimRequest) : ""));
+                Logger.LogError($"用户{user?.UserName ?? ""}({user?.Id ?? ""})根据楼盘获取评论列表(GetListByBuildingId)请求失败：\r\n{response.Message ?? ""}，\r\n请求参数为：\r\n(buildingid){buildingid ?? ""}，\r\n请求参数为：\r\n" + (condition != null ? JsonHelper.ToJson(condition) : ""));
             }
             return response;
         }
@@ -231,19 +237,20 @@ namespace BuildingComment.Controllers
         /// <summary>
         /// 根据评论ID获取评论列表
         /// </summary>
+        /// <param name="user"></param>
         /// <param name="id"></param>
         /// <param name="condition"></param>
         /// <returns></returns>
         [HttpPost("listcomment/{id}")]
-        //[TypeFilter(typeof(CheckPermission), Arguments = new object[] { "" })]
-        public async Task<ResponseMessage<List<CommentResponse>>> GetListById([FromRoute] string id, [FromForm]PageCondition condition)
+        [CheckPermission]
+        public async Task<ResponseMessage<List<CommentDetailResponse>>> GetListById(UserInfo user, [FromRoute] string id, [FromBody]PageCondition condition)
         {
-            var response = new ResponseMessage<List<CommentResponse>>();
+            var response = new ResponseMessage<List<CommentDetailResponse>>();
             if (!ModelState.IsValid && string.IsNullOrEmpty(id))
             {
                 response.Code = ResponseCodeDefines.ModelStateInvalid;
                 response.Message = ModelState.GetAllErrors();
-                //Logger.Warn($"用户{user?.UserName ?? ""}({user?.Id ?? ""})认领客户(ClaimCustomer)模型验证失败：\r\n{response.Message ?? ""}，\r\n请求参数为：\r\n" + (customerPoolClaimRequest != null ? JsonHelper.ToJson(customerPoolClaimRequest) : ""));
+                Logger.LogWarning($"用户{user?.UserName ?? ""}({user?.Id ?? ""})根据评论ID获取评论列表(GetListById)模型验证失败：\r\n{response.Message ?? ""}，\r\n请求参数为：\r\n(id){id ?? ""}，\r\n请求参数为：\r\n" + (condition != null ? JsonHelper.ToJson(condition) : ""));
                 return response;
             }
             try
@@ -254,7 +261,7 @@ namespace BuildingComment.Controllers
             {
                 response.Code = ResponseCodeDefines.ServiceError;
                 response.Message = e.Message;
-                //Logger.Error($"用户{user?.UserName ?? ""}({user?.Id ?? ""})认领客户(ClaimCustomer)请求失败：\r\n{response.Message ?? ""}，\r\n请求参数为：\r\n" + (customerPoolClaimRequest != null ? JsonHelper.ToJson(customerPoolClaimRequest) : ""));
+                Logger.LogError($"用户{user?.UserName ?? ""}({user?.Id ?? ""})根据评论ID获取评论列表(GetListById)请求失败：\r\n{response.Message ?? ""}，\r\n请求参数为：\r\n(id){id ?? ""}，\r\n请求参数为：\r\n" + (condition != null ? JsonHelper.ToJson(condition) : ""));
             }
             return response;
         }

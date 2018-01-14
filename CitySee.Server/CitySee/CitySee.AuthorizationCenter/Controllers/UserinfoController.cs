@@ -2,6 +2,7 @@
 using AutoMapper;
 using CitySee.AuthorizationCenter.Dto;
 using CitySee.Core;
+using CitySee.Core.Dto;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
