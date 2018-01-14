@@ -5,6 +5,7 @@ import * as actionTypes from '../constants/actionTypes'
 import {store} from '../index';
 import {Toast} from 'antd-mobile';
 import getApiResult from './sagaUtil';
+import {updateToken} from '../constants/actionCreator'
 
 
 export function* refreshTokenAsync() {
@@ -12,7 +13,7 @@ export function* refreshTokenAsync() {
     let postData = {
         grant_type: 'refresh_token',
         scope: 'openid offline_access',
-        client_id: 'wx',
+        client_id: 'citysee',
         refresh_token: store.getState().oidc.user.refresh_token
     };
     try {
@@ -30,22 +31,38 @@ export function* refreshTokenAsync() {
 }
 
 export function* loginAsync(action) {
-    let result = {isOk: false, extension: {}, msg: '获取核列详细失败！'};
+    let result = {isOk: false, extension: {}, msg: '用户名或密码错误！'};
     let url = WebApiConfig.login;
     try {
-        let res = yield call(ApiClient.postFormUrlEncode, url)
-        getApiResult(res, result);
+        let body = {
+            client_id: "citysee",
+            grant_type: "password",
+            client_secret: "123456",
+            scope: "openid offline_access profile",
+            ...action.payload
+        }
+        let res = yield call(ApiClient.postFormUrlEncode, url, body, {});
+        //getApiResult(res, result);
         console.log(`url:${url},result:${JSON.stringify(res)}`);
-        if (result.isOk) {
-            yield put({type: actionTypes.LOGIN_AUTHOR_COMPLETE, payload: result.extension});
+        if (res && res.data && res.data.access_token) {
+            result.isOk = true;
+            let now = Math.round(new Date().valueOf() / 1000);
+            var user = {
+                access_token: res.data.access_token,
+                refresh_token: res.data.refresh_token,
+                userInfo: res.data.userInfo,
+                expired: false,
+                expires_to: now + res.data.expires_in,
+                expires_in: res.data.expires_in
+            }
+            yield put({type: actionTypes.LOGIN_AUTHOR_COMPLETE, payload: user});
         }
     } catch (e) {
-        result.msg = "获取核列详细接口调用异常！";
+        result.msg = "认证接口调用异常！" + e;
+        // console.log("异常", e);
     }
     if (!result.isOk) {
-        Toast.fail({
-            description: result.msg
-        });
+        Toast.fail(result.msg);
     }
 }
 

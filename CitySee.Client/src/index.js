@@ -12,11 +12,14 @@ import createSagaMiddleware from 'redux-saga';
 import ignoreSubspaceMiddleware from './ignoreSubspaceMiddleware'
 import {createStore} from 'redux-dynamic-reducer'
 import rootReducer from './reducers';
-// import LoginPage from './login/login';
+import LoginPage from './pages/login/login';
 import Toolbar from './components/TopToolbar'
 import {composeWithDevTools} from 'redux-devtools-extension';
 import runSaga from './saga'
 import HomePage from './pages/indexList/indexPage'
+// import {tools,ToolComponent} from './tools';
+import RegisterPage from './pages/login/register';
+import ForgetPwdPage from './pages/login/forgetPwd';
 
 const history = createHistory();
 
@@ -120,10 +123,6 @@ class IndexPage extends Component {
 
 
   componentWillUnmount() {
-    // JPushModule.removeReceiveCustomMsgListener(receiveCustomMsgEvent);
-    // JPushModule.removeReceiveNotificationListener(receiveNotificationEvent);
-    // JPushModule.removeReceiveOpenNotificationListener(openNotificationEvent);
-    // JPushModule.clearAllNotifications();
     BackHandler.removeEventListener("hardwareBackPress", this.hardwareBackPress)
   }
   render() {
@@ -137,12 +136,13 @@ class IndexPage extends Component {
 
         <ConnectedRouter history={history}>
           <Layer>
-            <Route exact path='/' component={Toolbar} />
-            {/* <View><Text>sjfasdjf</Text></View> */}
+            <Route exact path='/' component={HomePage} />
+            <Route path={'/RegisterPage'} component={RegisterPage} />
+            <Route path={'/ForgetPwdPage'} component={ForgetPwdPage} />
+            <Route path={'/LoginPage'} component={LoginPage} />
           </Layer>
         </ConnectedRouter>
       </Provider >
-      // <View><Text>sjfasdjf</Text></View>
     )
   }
 }
