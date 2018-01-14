@@ -18,7 +18,7 @@ if (Platform.OS === 'android' && (Platform.Version * 1) <= 20) {
 class TopToolbar extends Component {
 
     state = {
-        selectedTab: 'map'
+        selectedTab: 'index'
     }
 
     
@@ -44,15 +44,15 @@ class TopToolbar extends Component {
                 <TabBar tintColor='red'>
                     <TabBar.Item title='首页'
                         iconStyle={{width:20,height:20}}
-                        icon={require('../images/sy-20x20.png')} 
-                        selectedIcon={require('../images/sy2-20x20.png')}
+                        icon={require('../images/home.png')} 
+                        selectedIcon={require('../images/home2.png')}
                         selected={this.state.selectedTab === 'index'} onPress={() => this.changeTab('index')}>
                         <IndexPage actived={this.state.selectedTab === 'index'} match={this.props.match}/>
                     </TabBar.Item>
                     <TabBar.Item title="地标"
                         iconStyle={{width:20,height:20}}
-                        icon={require('../images/sy-20x20.png')} 
-                        selectedIcon={require('../images/sy2-20x20.png')}
+                        icon={require('../images/location.png')} 
+                        selectedIcon={require('../images/location2.png')}
                         selected={this.state.selectedTab === 'map'} onPress={() => this.changeTab('map')}>
                         <MapIndex actived={this.state.selectedTab === 'map'} match={this.props.match}/>
                     </TabBar.Item>
@@ -64,14 +64,14 @@ class TopToolbar extends Component {
                     </TabBar.Item>
                     <TabBar.Item title="关注"
                         iconStyle={{width:20,height:20}}
-                        icon={require('../images/sy-20x20.png')} 
-                        selectedIcon={require('../images/sy2-20x20.png')}
+                        icon={require('../images/heart.png')} 
+                        selectedIcon={require('../images/heart2.png')}
                         selected={this.state.selectedTab === 'message'} onPress={() => this.changeTab('message')}>
                     </TabBar.Item>
                     <TabBar.Item title="我"
                         iconStyle={{width:20,height:20}}
-                        icon={require('../images/sy-20x20.png')}
-                        selectedIcon={require('../images/sy2-20x20.png')}
+                        icon={require('../images/person.png')}
+                        selectedIcon={require('../images/person2.png')}
                         selected={this.state.selectedTab === 'my'} onPress={() => this.changeTab('my')}>
                     </TabBar.Item>
 

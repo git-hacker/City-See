@@ -98,6 +98,7 @@ namespace CitySee.AuthorizationCenter
             citySeeContext = new CitySeeContextImpl(services);
             citySeeContext.PluginConfigStorage = new DefaultPluginConfigStorage();
             citySeeContext.PluginFactory = new DefaultPluginFactory();
+            citySeeContext.ConnectionString = configuration["Data:DefaultConnection:ConnectionString"];
 
             var environment = services.FirstOrDefault(x => x.ServiceType == typeof(IHostingEnvironment))?.ImplementationInstance;
             var apppart = services.FirstOrDefault(x => x.ServiceType == typeof(ApplicationPartManager))?.ImplementationInstance;
@@ -165,9 +166,7 @@ namespace CitySee.AuthorizationCenter
         {
             using (var scope = services.GetRequiredService<IServiceScopeFactory>().CreateScope())
             {
-                bool StartIsOk = citySeeContext.Start().Result;
-
-                var context = scope.ServiceProvider.GetRequiredService<CitySeeDbContext>();
+                //var context = scope.ServiceProvider.GetRequiredService<CitySeeDbContext>();
                 //await context.Database.EnsureCreatedAsync();
 
                 var applicationmanager = scope.ServiceProvider.GetRequiredService<OpenIddict.Core.OpenIddictApplicationManager<OpenIddictApplication>>();
@@ -196,6 +195,8 @@ namespace CitySee.AuthorizationCenter
                     };
                     await usermanager.CreateAsync(user, "123456");
                 }
+
+                bool StartIsOk = citySeeContext.Start().Result;
 
 
 
