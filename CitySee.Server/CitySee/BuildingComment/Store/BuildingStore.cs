@@ -32,6 +32,7 @@ namespace BuildingComment.Store
             await Context.SaveChangesAsync(cancellationToken);
             return building;
         }
+        
 
         public Task<TResult> GetAsync<TResult>(Func<IQueryable<Building>, IQueryable<TResult>> query, CancellationToken cancellationToken = default(CancellationToken))
         {
