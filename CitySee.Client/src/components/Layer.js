@@ -1,6 +1,7 @@
 import React, { Component, Children } from 'react'
 import { View, ScrollView, StyleSheet } from 'react-native'
 import LayerStyles from './LayerStyle';
+import {goBack} from 'react-router-redux'
 import Spinner from './Spinner'
 
 export class LayerRouter extends Component {
@@ -46,27 +47,14 @@ class Layer extends Component {
 
     render() {
         const [router, ...children] = this.filterChildren();
-
+        console.log(children)
         return (
             <View style={LayerStyles.tarBar}>
-               
-                    <View style={[LayerStyles.scrollPanel, this.props.style]}>
-
-                        {children}
-
-                    </View>
-                    {router ? router : null}
-                    {this.props.showLoading ? (<Spinner></Spinner>) : null}
-               
-                {/* <View  style={LayerStyles.rel}>
-                    <View style={LayerStyles.panel}>
-                      <ScrollView style={LayerStyles.sv} contentContainerStyle={LayerStyles.svc}>
-                        {children}
-                      </ScrollView>
-                    </View>
-                     {router?router:null}
-                     {this.props.showLoading? (<Spinner></Spinner>):null}
-                </View> */}
+                <View style={[LayerStyles.scrollPanel, this.props.style]}>
+                    {children}
+                </View>
+                {router ? router : null}
+                {this.props.showLoading ? (<Spinner></Spinner>) : null}
             </View>
         )
     }

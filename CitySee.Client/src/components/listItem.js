@@ -41,7 +41,8 @@ const styles = StyleSheet.create(
 class ListItem extends Component {
 
     render() {
-        let rowData = this.props.item;
+        const rowData = this.props.item||{};
+        const imgs = rowData.imgs || []
         return (
             <View style={styles.main}>
                 <View style={styles.header}>
@@ -58,7 +59,7 @@ class ListItem extends Component {
                 <Text style={styles.content}>{rowData.content}</Text>
                 <View style={styles.imgs}>
                     {
-                        rowData.imgs.map((v,i) => {
+                        imgs.map((v,i) => {
                             return <Image key={i} style={styles.img} source={{uri: v}} />
                         })
                     }

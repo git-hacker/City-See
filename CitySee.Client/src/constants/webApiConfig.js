@@ -4,7 +4,7 @@ const WebApiConfig = {
         getCustomerByUserID: BaseApiUrl + 'customerInfo/salesmancustomer/',//根据用户ID获取客户列表
         getAuditHistory: BaseApiUrl + "examines/",//获取审核历史详细
     },
-    login: BaseApiUrl + '',
+    login: BaseApiUrl + 'connect/token',
     refreshToken: BaseApiUrl + ''
 }
 export default WebApiConfig;
