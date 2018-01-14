@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BuildingComment.Dto.Response;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -64,7 +65,9 @@ namespace BuildingComment.Model
         public string Icon { get; set; }
 
         [NotMapped]
-        public IEnumerable<CommentReply> CommentReplies { get; set; }
-        
+        public IEnumerable<FileInfo> CommentFileInfo { get; set; }
+
+        [NotMapped]
+        public List<FileItemResponse> FileList { get; set; }
     }
 }
