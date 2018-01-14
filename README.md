@@ -4,7 +4,7 @@
 ### 标签栏
 City-See分为五大功能模块：首页（建筑评论列表）、地标（地图定位展示评论量）、发布（发布对建筑的评论）、关注（感兴趣的建筑的评论列表）、个人中心（消息、足迹）
 
-![标签栏](https://raw.githubusercontent.com/git-hacker/City-See/master/Product/%E5%8E%9F%E5%9E%8B%E5%9B%BE/%E6%A0%87%E7%AD%BE%E6%A0%8F.png)
+![标签栏](https://raw.githubusercontent.com/git-hacker/City-See/master/Image/%E6%A0%87%E7%AD%BE%E6%A0%8F.png)
 ### 首页
 展示内容主要为：附近两公里范围内用户发布的对建筑的评论列表，以及两公里范围内评论最火的建筑
 ![首页](https://raw.githubusercontent.com/git-hacker/City-See/master/Image/%E9%A6%96%E9%A1%B5.png)
