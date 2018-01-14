@@ -4,12 +4,12 @@ import {View, ListView, StyleSheet, Text, TouchableOpacity, TouchableHighlight, 
 import {Button, Flex, InputItem, List} from 'antd-mobile';
 // import {Route} from 'react-router';
 import {connect} from 'react-redux';
-import Layer, {LayerRouter} from '../components/Layer';
-import SubNavBar from '../components/SubNavBar';
+import Layer, {LayerRouter} from '../../components/Layer';
+import SubNavBar from '../../components/SubNavBar';
 
-const identityCodeImg = require('../images/identityCode.png');
-const userNameImg = require('../images/userName.png');
-const pwdImg = require('../images/pwd.png');
+const identityCodeImg = require('../../images/identityCode.png');
+const userNameImg = require('../../images/userName.png');
+const pwdImg = require('../../images/pwd.png');
 const styles = StyleSheet.create({
     frontColor: {
         color: '#f94771',

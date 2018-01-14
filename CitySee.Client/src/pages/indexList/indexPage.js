@@ -1,6 +1,6 @@
 import React, { Component, Children } from 'react';
 import { List, Modal,ActionSheet } from 'antd-mobile';
-import { Platform, StatusBar, View, ScrollView, Text, StyleSheet, TouchableOpacity, Image, ListView } from 'react-native'
+import { Platform, StatusBar, View, ScrollView, Text, StyleSheet, TouchableOpacity, Image, ListView, TouchableWithoutFeedback } from 'react-native'
 import { connect } from 'react-redux'
 import { replace } from 'react-router-redux';
 import {IndexPageStyles} from './indexPageStyle'
@@ -9,16 +9,35 @@ import ProjectItem from '../../components/ProjectItem'
 import TabBar from '../../components/TopToolbar'
 import ListItem from '../../components/listItem'
 import Comment from '../../components/Comment'
+import {Route} from 'react-router';
+import {goBack} from 'react-router-redux'
+import {push} from 'react-router-redux';
+import Layer, {LayerRouter} from '../../components/Layer';
+import Attention from '../../attention'
 
-const style = StyleSheet.create({
-  main: {
-    // padding: 5,
-    marginBottom: 10,
-    borderStyle: 'solid',
-    borderBottomColor: '#e5e5e5',
-    borderBottomWidth: 1
-}
-})
+const style = StyleSheet.create(
+    {
+        main: {
+            // padding: 5,
+            marginBottom: 10,
+            borderStyle: 'solid',
+            borderBottomColor: '#e5e5e5',
+            borderBottomWidth: 1
+        },
+        right:{
+            height: 120,
+            position: 'absolute',
+            // backgroundColor: 'red',
+            right:0,
+            top:0,
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'center',
+            width: '10%'
+        }
+    }
+)
 
 class HomePage extends Component {
 
@@ -52,19 +71,19 @@ class HomePage extends Component {
                 imgSource:  require('../../images/timg.jpg'),
                 },
                 {
-                  name: '首座max',
+                  name: '安邦成都金融广场',
                   imgSource:  require('../../images/timg.jpg'),
                 },
                 {
-                  name: '成都银泰中心',
+                  name: '东方希望中心',
                   imgSource:  require('../../images/timg.jpg'),
                 },
                 {
-                  name: '成都银泰中心',
+                  name: '首座MAX',
                   imgSource:  require('../../images/timg.jpg'),
                 },
                 {
-                  name: '成都银泰中心',
+                  name: '创新时代广场',
                   imgSource:  require('../../images/timg.jpg'),
                 },
                 {
@@ -81,6 +100,14 @@ class HomePage extends Component {
                 },
             ]
         }
+    }
+
+    getPath = (path) => {
+        console.log("path:======", `${this.props.match.url}${path}`);
+        return `${this.props.match.url}${path}`
+    }
+    gotoPath = (path, par) => {
+        this.props.dispatch(push(this.getPath(path), par));
     }
     
     componentDidMount() {
@@ -110,39 +137,52 @@ class HomePage extends Component {
                    </View>
         }
         return (
-            <View style={IndexPageStyles.content}>
-                <NavBar titleName='眷城'/>
-                <View style={{padding: 10, height: '100%'}}>
-                    <ScrollView style={{height: 240}} horizontal>
-                    <View style={IndexPageStyles.topBuilding}>
-                    {
-                        this.state.list.map((item, index) => {
-                        return (
-                            <ProjectItem key={index} name={item.name} imgSource={item.imgSource}/>
-                        )
-                        })
-                    }
+            <Layer>
+                <View style={IndexPageStyles.content}>
+                    <NavBar titleName={this.props.page === 'attention' ? '关注' : '眷城'}/>
+                    <View style={{padding: 10, height: '100%'}}>
+                        <ScrollView style={{height: 240, width: this.props.page === 'attention' ? '90%' : '100%'}} horizontal>
+                        <View style={[IndexPageStyles.topBuilding]}>
+                        {
+                            this.state.list.map((item, index) => {
+                                return (
+                                    <ProjectItem key={index} name={item.name} imgSource={item.imgSource}/>
+                                )
+                            })
+                        }
+                        </View>
+                        </ScrollView>
+                        {
+                            this.props.page === 'attention' ?
+                            <TouchableWithoutFeedback onPress={() => {this.gotoPath('Attention')}}>
+                                <View style={style.right}>
+                                    <Image style={{height:30, width: 30}} source={require('../../images/right_b.png')}/>
+                                </View>
+                            </TouchableWithoutFeedback>
+                            :
+                            null
+                        }
+                        
+                        <ListView
+                            ref={el => this.lv = el}
+                            onScroll={() => { console.log('scroll') }}
+                            scrollRenderAheadDistance={500}
+                            onEndReached={this.onEndReached}
+                            onEndReachedThreshold={10}
+                            style={{height: 1000}}
+                            renderFooter={() => (<View style={{ padding: 30, display: 'flex', justifyContent:'center', alignItems: 'center' }}>
+                                <Text>{this.state.loading ? '正在获取数据...' : ''}</Text>
+                            </View>)}
+                            dataSource={this.state.dataSource}
+                            renderRow={row}
+                        >
+                        </ListView>
                     </View>
-                    </ScrollView>
-                    <ListView
-                        ref={el => this.lv = el}
-                        onScroll={() => { console.log('scroll') }}
-                        scrollRenderAheadDistance={500}
-                        onEndReached={this.onEndReached}
-                        onEndReachedThreshold={10}
-                        style={{height: 1000}}
-                        renderFooter={() => (<View style={{ padding: 30, display: 'flex', justifyContent:'center', alignItems: 'center' }}>
-                            <Text>{this.state.loading ? '正在获取数据...' : ''}</Text>
-                        </View>)}
-                        dataSource={this.state.dataSource}
-                        renderRow={row}
-                    >
-                    </ListView>
                 </View>
-                
-                
-            </View>
- 
+                <LayerRouter>
+                    <Route path={this.getPath('Attention')} component={Attention} />
+                </LayerRouter>
+            </Layer>
         )
     }
 }

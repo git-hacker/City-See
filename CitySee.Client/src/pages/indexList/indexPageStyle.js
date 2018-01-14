@@ -13,7 +13,7 @@ export const IndexPageStyles = StyleSheet.create({
     topBuilding: {
       flexDirection: 'row',
       overflow:'scroll',
-      width: '100%',
+      // width: '100%',
       height: 100
     }
 

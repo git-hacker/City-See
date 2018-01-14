@@ -12,9 +12,7 @@ namespace BuildingComment.Store
     {
         IQueryable<Comment> GetCommentQuery();
 
-        IQueryable<Comment> GetCommentDetail();
-
-        Task<Comment> CreateAsync(Comment comment, CancellationToken cancellationToken = default(CancellationToken));
+        Task<Comment> CreateAsync(Comment comment, Building building, CancellationToken cancellationToken = default(CancellationToken));
 
         Task<TResult> GetAsync<TResult>(Func<IQueryable<Comment>, IQueryable<TResult>> query, CancellationToken cancellationToken = default(CancellationToken));
 
@@ -22,6 +20,6 @@ namespace BuildingComment.Store
 
         Task UpdateAsync(Comment comment, CancellationToken cancellationToken = default(CancellationToken));
 
-        Task DeleteListAsync(List<Comment> comments, CancellationToken cancellationToken = default(CancellationToken));
+        Task DeleteAsync(Comment comment,Building building, CancellationToken cancellationToken = default(CancellationToken));
     }
 }

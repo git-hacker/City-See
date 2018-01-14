@@ -21,6 +21,11 @@ namespace BuildingComment.Model.Context
         public DbSet<Comment> Comments { get; set; }
 
         /// <summary>
+        /// 回复
+        /// </summary>
+        public DbSet<CommentReply> CommentReplies { get; set; }
+
+        /// <summary>
         /// 点赞
         /// </summary>
         public DbSet<GiveLike> GiveLikes { get; set; }
@@ -42,6 +47,11 @@ namespace BuildingComment.Model.Context
             builder.Entity<Comment>(b =>
             {
                 b.ToTable("comment");
+            });
+
+            builder.Entity<CommentReply>(b =>
+            {
+                b.ToTable("commentreply");
             });
 
             builder.Entity<GiveLike>(b =>

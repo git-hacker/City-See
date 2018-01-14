@@ -116,7 +116,7 @@ class SubNavBar extends Component {
         let hideBackIcon = this.props.hideBackIcon === true;
 
         return (
-            <View style={[LayerStyles.xyhLayer, {display: 'flex', flexDirection: 'column'}]}>
+            <View style={[LayerStyles.tarBar, {display: 'flex', flexDirection: 'column'}]}>
                 <NavBar style={navbarStyles}>
 
 

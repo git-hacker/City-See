@@ -21,14 +21,18 @@ namespace BuildingComment.Manager
 
         protected ICommentStore _icommentStore { get; }
 
+        protected IBuildingStore _ibuildingStore { get; }
+
         protected IMapper _mapper { get; }
 
         public CommentManager(ICommentStore icommentStore,
             IGiveLikeStore igiveLikeStore,
+            IBuildingStore buildingStore,
             IMapper mapper)
         {
             _igiveLikeStore = igiveLikeStore ?? throw new ArgumentNullException(nameof(igiveLikeStore));
             _icommentStore = icommentStore ?? throw new ArgumentNullException(nameof(icommentStore));
+            _ibuildingStore = buildingStore ?? throw new ArgumentNullException(nameof(buildingStore));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
@@ -41,21 +45,19 @@ namespace BuildingComment.Manager
         /// <returns></returns>
         public virtual async Task<CommentResponse> CreateAsync(string userid, CommentRequest commentRequest, CancellationToken cancellationToken = default(CancellationToken))
         {
+            var bulding = await _ibuildingStore.GetAsync(a => a.Where(b => b.Id == commentRequest.BuildingId));
+            if (bulding == null)
+                return null;
+            bulding.CommentNum++;
+
             var comment = _mapper.Map<Comment>(commentRequest);
 
-            FilterHelper filter = new FilterHelper(@"C:\Users\Administrator\Desktop\新建文本文档.txt");   //存放敏感词的文档  
-            filter.SourctText = commentRequest.Content;
-            commentRequest.Content = filter.Filter('*');
-
-
+            FilterHelper filter = new FilterHelper();
+            commentRequest.Content = filter.Filter(commentRequest.Content);
             comment.Id = Guid.NewGuid().ToString();
             comment.CreateTime = DateTime.Now;
             comment.CustomerId = userid;
-            if (comment.UpId == "0")
-                comment.FirstId = comment.Id;
-            else
-                comment.FirstId = (await _icommentStore.GetAsync(a => a.Where(y => y.Id == comment.UpId))).FirstId;
-            var response = await _icommentStore.CreateAsync(comment, cancellationToken);
+            var response = await _icommentStore.CreateAsync(comment, bulding, cancellationToken);
             return _mapper.Map<CommentResponse>(response);
         }
 
@@ -72,6 +74,7 @@ namespace BuildingComment.Manager
             if (oldcommen == null)
                 return;
             oldcommen.Content = commentRequest.Content;
+            oldcommen.IsAnonymous = commentRequest.IsAnonymous;
             await _icommentStore.UpdateAsync(oldcommen, cancellationToken);
         }
 
@@ -79,13 +82,18 @@ namespace BuildingComment.Manager
         /// 删除评论信息
         /// </summary>
         /// <param name="userid">创建者</param>
-        /// <param name="ids">数据id集</param>
+        /// <param name="id">数据id</param>
         /// <param name="cancellationToken">验证</param>
         /// <returns></returns>
-        public virtual async Task DeleteAsync(string userid, List<string> ids, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual async Task DeleteAsync(string userid, string id, CancellationToken cancellationToken = default(CancellationToken))
         {
-            var response = await _icommentStore.ListAsync(a => a.Where(b => ids.Contains(b.Id) && b.CustomerId == userid));
-            await _icommentStore.DeleteListAsync(response, cancellationToken);
+
+            var response = await _icommentStore.GetAsync(a => a.Where(b => id == b.Id && b.CustomerId == userid));
+            var bulding = await _ibuildingStore.GetAsync(a => a.Where(b => b.Id == response.BuildingId));
+            if (bulding == null)
+                return;
+            bulding.CommentNum--;
+            await _icommentStore.DeleteAsync(response, bulding, cancellationToken);
         }
 
         /// <summary>
@@ -110,36 +118,46 @@ namespace BuildingComment.Manager
         /// <returns></returns>
         public virtual async Task CreateGiveLikeAsync(string userid, string id, CancellationToken cancellationToken = default(CancellationToken))
         {
+
+            var comment = await _icommentStore.GetAsync(a => a.Where(b => b.Id == id), cancellationToken);
+            if (comment == null)
+                return;
             var like = new GiveLike();
             like.Id = id;
             like.CreateTime = DateTime.Now;
             like.CustomerId = userid;
-            await _igiveLikeStore.CreateAsync(like, cancellationToken);
+            comment.LikeNum++;
+
+            await _igiveLikeStore.CreateAsync(like, comment, cancellationToken);
         }
 
         /// <summary>
         /// 取消点赞
         /// </summary>
+        /// <param name="userid"></param>
         /// <param name="id">评论ID</param>
         /// <param name="cancellationToken">验证</param>
         /// <returns></returns>
-        public virtual async Task CancelGiveLikeAsync(string id, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual async Task CancelGiveLikeAsync(string userid, string id, CancellationToken cancellationToken = default(CancellationToken))
         {
-            await _igiveLikeStore.DeleteAsync(new GiveLike() { Id = id }, cancellationToken);
+            var comment = await _icommentStore.GetAsync(a => a.Where(b => b.Id == id), cancellationToken);
+            if (comment == null)
+                return;
+            comment.LikeNum--;
+            await _igiveLikeStore.DeleteAsync(new GiveLike() { Id = id, CustomerId = userid }, comment, cancellationToken);
         }
 
         /// <summary>
-        /// 根据建筑ID获取评论
+        /// 根据用户ID获取评论
         /// </summary>
-        /// <param name="user">创建者</param>
-        /// <param name="buildingid">请求实体</param>
+        /// <param name="userid">请求实体</param>
         /// <param name="condition"></param>
         /// <param name="cancellationToken">验证</param>
         /// <returns></returns>
-        public virtual async Task<PagingResponseMessage<CommentResponse>> ListByBuildingIdAsync(string buildingid, PageCondition condition, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual async Task<PagingResponseMessage<CommentResponse>> ListByUserIdAsync(string userid, PageCondition condition, CancellationToken cancellationToken = default(CancellationToken))
         {
             var response = new PagingResponseMessage<CommentResponse>();
-            var result = _icommentStore.GetCommentQuery().Where(x => x.BuildingId == buildingid && x.UpId == "0");
+            var result = _icommentStore.GetCommentQuery().Where(x => x.CustomerId == userid);
             response.TotalCount = await result.CountAsync(cancellationToken);
             var query = await result.OrderByDescending(x => x.CreateTime).Skip(condition.PageSize * condition.PageIndex).Take(condition.PageSize).ToListAsync(cancellationToken);
             response.PageSize = condition.PageSize;
@@ -149,16 +167,21 @@ namespace BuildingComment.Manager
         }
 
         /// <summary>
-        /// 根据评论ID获取评论详情
+        /// 根据建筑IDs获取评论
         /// </summary>
-        /// <param name="id">请求实体</param>
         /// <param name="condition"></param>
         /// <param name="cancellationToken">验证</param>
         /// <returns></returns>
-        public virtual async Task<List<CommentDetailResponse>> ListByIdAsync(string id, PageCondition condition, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual async Task<PagingResponseMessage<CommentResponse>> ListByBuildingIdAsync(CommentSearch condition, CancellationToken cancellationToken = default(CancellationToken))
         {
-            var request = await _icommentStore.GetCommentDetail().Where(x => x.FirstId == id).ToListAsync(cancellationToken);
-            return _mapper.Map<List<CommentDetailResponse>>(request);
+            var response = new PagingResponseMessage<CommentResponse>();
+            var result = _icommentStore.GetCommentQuery().Where(x => condition.Buildings.Contains(x.BuildingId));
+            response.TotalCount = await result.CountAsync(cancellationToken);
+            var query = await result.OrderByDescending(x => x.CreateTime).Skip(condition.PageSize * condition.PageIndex).Take(condition.PageSize).ToListAsync(cancellationToken);
+            response.PageSize = condition.PageSize;
+            response.PageSize = condition.PageSize;
+            response.Extension = _mapper.Map<List<CommentResponse>>(query);
+            return response;
         }
     }
 }

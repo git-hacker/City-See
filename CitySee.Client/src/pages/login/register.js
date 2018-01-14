@@ -4,12 +4,12 @@ import {View, ListView, StyleSheet, Text, TouchableOpacity, TouchableHighlight, 
 import {Button, Flex, InputItem, List} from 'antd-mobile';
 // import {Route} from 'react-router';
 import {connect} from 'react-redux';
-import Layer, {LayerRouter} from '../components/Layer';
-import SubNavBar from '../components/SubNavBar';
+import Layer, {LayerRouter} from '../../components/Layer';
+import SubNavBar from '../../components/SubNavBar';
 
-const identityCodeImg = require('../images/identityCode.png');
-const userNameImg = require('../images/userName.png');
-const pwdImg = require('../images/pwd.png');
+const identityCodeImg = require('../../images/identityCode.png');
+const userNameImg = require('../../images/userName.png');
+const pwdImg = require('../../images/pwd.png');
 const styles = StyleSheet.create({
     frontColor: {
         color: '#f94771',
@@ -44,7 +44,7 @@ class RegisterPage extends Component {
         return (
             <Layer style={{flexDirection: 'column', paddingBottom: 5}}>
                 <SubNavBar title='新用户注册'>
-                    <View style={{flex: 3, padding: 30, paddingTop: 10}}>
+                    <View style={{padding: 30, paddingTop: 10}}>
                         <Flex>
                             <Flex.Item style={{flex: 1}}><Image source={userNameImg} style={[styles.inputImg]} /></Flex.Item>
                             <Flex.Item style={{flex: 9}}><List><InputItem placeholder='+86 手机号码' /></List></Flex.Item>
