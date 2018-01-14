@@ -76,6 +76,7 @@ namespace BuildingComment.Controllers
         /// <summary>
         /// 获取建筑
         /// </summary>
+        /// <param name="user"></param>
         /// <param name="buildingSearch"></param>
         /// <returns></returns>
         [HttpPost("list")]

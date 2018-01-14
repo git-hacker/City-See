@@ -35,6 +35,16 @@ namespace BuildingComment.Model.Context
         /// </summary>
         public DbSet<UserInfo> Users { get; set; }
 
+        /// <summary>
+        /// 文件表
+        /// </summary>
+        public DbSet<FileInfo> FileInfos { get; set; }
+
+        /// <summary>
+        /// 评论文件关联表
+        /// </summary>
+        public DbSet<CommentImages> CommentImages { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -64,6 +74,18 @@ namespace BuildingComment.Model.Context
             {
                 b.HasKey(k => new { k.Id });
                 b.ToTable("aspnetusers");
+            });
+
+            builder.Entity<FileInfo>(b =>
+            {
+                b.HasKey(k => new { k.FileGuid, k.Type, k.Uri });
+                b.ToTable("fileinfos");
+            });
+
+            builder.Entity<CommentImages>(b =>
+            {
+                b.HasKey(k => new { k.FileGuid, k.CommentId });
+                b.ToTable("commentimages");
             });
         }
 

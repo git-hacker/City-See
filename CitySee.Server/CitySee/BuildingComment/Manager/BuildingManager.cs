@@ -35,8 +35,10 @@ namespace BuildingComment.Manager
         /// <returns></returns>
         public virtual async Task<BuildingResponse> CreateAsync(BuildingRequest buildingRequest, CancellationToken cancellationToken = default(CancellationToken))
         {
+            var old = await _ibuildingStore.GetAsync(a => a.Where(b => b.Longitude == buildingRequest.Longitude && b.Latitude == buildingRequest.Latitude && b.BuildingName == buildingRequest.BuildingName));
+            if (old != null)
+                return null;
             var building = _mapper.Map<Building>(buildingRequest);
-            building.Id = Guid.NewGuid().ToString();
             building.CreateTime = DateTime.Now;
             var response = await _ibuildingStore.CreateAsync(building, cancellationToken);
             return _mapper.Map<BuildingResponse>(response);

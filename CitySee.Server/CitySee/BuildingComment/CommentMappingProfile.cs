@@ -19,7 +19,8 @@ namespace BuildingComment
             CreateMap<CommentReply, CommentReplyRequest>();
 
             CreateMap<CommentResponse, Comment>();
-            CreateMap<Comment, CommentResponse>();
+            CreateMap<Comment, CommentResponse>()
+                .ForMember(a => a.FileList, (map) => map.MapFrom(b => b.FileList));
 
             CreateMap<CommentRequest, Comment>();
             CreateMap<Comment, CommentRequest>();
