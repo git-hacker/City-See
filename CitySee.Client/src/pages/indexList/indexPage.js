@@ -119,7 +119,7 @@ class HomePage extends Component {
     render() {
         const row = (rowData, sectionID, rowID) => {
             return <View style={style.main}>
-                      <ListItem item={rowData} />
+                      <ListItem item={rowData}  onClick={() => this.gotoDetail(rowData)} />
                       <Comment/>
                    </View>
         }
