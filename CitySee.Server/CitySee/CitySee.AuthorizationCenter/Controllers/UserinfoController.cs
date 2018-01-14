@@ -40,7 +40,6 @@ namespace CitySee.AuthorizationCenter.Controllers
                     response.Code = ResponseCodeDefines.NotFound;
                     response.Message = "user not found";
                 }
-                var a = _mapper.Map<UserinfoResponse>(user);
                 response.Extension = _mapper.Map<UserinfoResponse>(user);
             }
             catch (Exception e)
