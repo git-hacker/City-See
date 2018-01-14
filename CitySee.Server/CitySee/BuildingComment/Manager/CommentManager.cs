@@ -160,10 +160,60 @@ namespace BuildingComment.Manager
             var result = _icommentStore.GetCommentQuery().Where(x => x.CustomerId == userid);
             response.TotalCount = await result.CountAsync(cancellationToken);
             var query = await result.OrderByDescending(x => x.CreateTime).Skip(condition.PageSize * condition.PageIndex).Take(condition.PageSize).ToListAsync(cancellationToken);
+            
+            query = query.Select(x => {
+                if (x.CommentFileInfo?.Count() > 0)
+                {
+                    var f = x.CommentFileInfo.Select(a => a.FileGuid).Distinct();
+                    foreach (var item in f)
+                    {
+                        var f1 = x.CommentFileInfo.Where(a => a.FileGuid == item).ToList();
+                        if (f1?.Count > 0)
+                        {
+                            x.FileList.Add(ConvertToFileItem(item, f1));
+                        }
+                    }
+                }
+
+                return x; }).ToList();
+
+
             response.PageSize = condition.PageSize;
             response.PageSize = condition.PageSize;
-            response.Extension = _mapper.Map<List<CommentResponse>>(query);
+            response.Extension = _mapper.Map<List<CommentResponse>>(query); ;
+
+
             return response;
+        }
+
+        private FileItemResponse ConvertToFileItem(string fileGuid, List<FileInfo> fl)
+        {
+            FileItemResponse fi = new FileItemResponse();
+            fi.FileGuid = fileGuid;
+            fi.Icon = fl.FirstOrDefault(x => x.Type == "ICON")?.Uri;
+            fi.Original = fl.FirstOrDefault(x => x.Type == "ORIGINAL")?.Uri;
+            fi.Medium = fl.FirstOrDefault(x => x.Type == "MEDIUM")?.Uri;
+            fi.Small = fl.FirstOrDefault(x => x.Type == "SMALL")?.Uri;
+
+            string fr = CitySee.Core.CitySeeContext.Current.FileServerRoot;
+            fr = (fr ?? "").TrimEnd('/');
+            if (!String.IsNullOrEmpty(fi.Icon))
+            {
+                fi.Icon = fr + "/" + fi.Icon.TrimStart('/');
+            }
+            if (!String.IsNullOrEmpty(fi.Original))
+            {
+                fi.Original = fr + "/" + fi.Original.TrimStart('/');
+            }
+            if (!String.IsNullOrEmpty(fi.Medium))
+            {
+                fi.Medium = fr + "/" + fi.Medium.TrimStart('/');
+            }
+            if (!String.IsNullOrEmpty(fi.Small))
+            {
+                fi.Small = fr + "/" + fi.Small.TrimStart('/');
+            }
+            return fi;
         }
 
         /// <summary>

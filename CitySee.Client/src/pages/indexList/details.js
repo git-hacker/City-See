@@ -16,22 +16,25 @@ const styles = StyleSheet.create({
   countBox: {
     paddingLeft: 10,
     paddingRight: 10,
+    paddingBottom: 10,
     flex:1,
     flexDirection:'row',
     alignItems:'center',
     justifyContent: 'space-between',
   },
   countLeft: {
+    flexDirection:'row',
    flex: 0.5,
    justifyContent:'flex-start'
   },
   countRight: {
+    flexDirection:'row',
     flex: 0.5,
     justifyContent:'flex-end'
   },
   header: {
     display: 'flex',
-    flexDirection: 'row'
+    flexDirection: 'row',
   },
   headerRight: {
       display: 'flex',
@@ -54,6 +57,8 @@ const styles = StyleSheet.create({
       marginRight: 10
   },
   content: {
+      paddingLeft: 10,
+      paddingRight: 10,
       marginTop: 5,
       marginBottom: 5
   }
@@ -77,25 +82,30 @@ class SendPage extends Component {
         return (
           <Layer style={{flexDirection: 'column', paddingBottom: 5}}>
                 <SubNavBar title='正文'>
-                   <ListItem item={data} />
+                <View style={{padding: 10}}>
+                  <ListItem item={data} page='gz'/>
+                </View>
                    <View  style={styles.list}>
+
                      <View style={styles.countBox}>
                        <View style={styles.countLeft}>
                          <Text style={{color: '#333'}}>评论</Text><Text style={{paddingLeft: 10, color: '#f94771'}}>12</Text>
                        </View>
                        <View style={styles.countRight}>
-                         <Text style={{color: '#333'}}>赞</Text><Text  style={{paddingLeft: 10, color: '#f94771'}}>>12</Text>
+                         <Text style={{color: '#333'}}>赞</Text><Text  style={{paddingLeft: 10, color: '#f94771'}}>12</Text>
                        </View>
                      </View>
 
-                     <View style={styles.header}>
-                          {/* <Image style={styles.icon} source={require('https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1515868814197&di=744ee9f65e84173f67137d8da3e0b9d4&imgtype=0&src=http%3A%2F%2Fimgsrc.baidu.com%2Fimage%2Fc0%253Dshijue1%252C0%252C0%252C294%252C40%2Fsign%3Dcd21589de350352aa56c2d4b3b2a9187%2Fc75c10385343fbf245c3f109ba7eca8065388f29.jpg')} /> */}
-                          <View style={styles.headerRight}>
-                              <Text style={{color: '#333333', fontSize: 14}}>匿名用户</Text>
-                              <Text style={{color: '#333333', fontSize: 12}}>1小时前</Text>
+                      <View style={{padding: 10, borderStyle: 'solid', borderColor:'#dcdcdc', borderTopWidth: 1,  borderBottomWidth: 1}}>
+                          <View style={styles.header}>
+                              <Image style={styles.icon} source={{uri: data.icon}} />
+                              <View style={styles.headerRight}>
+                                  <Text style={{color: '#333333', fontSize: 14}}>匿名用户</Text>
+                                  <Text style={{color: '#333333', fontSize: 12}}>1小时前</Text>
+                              </View>
                           </View>
+                          <Text style={styles.content}>哈哈</Text>
                       </View>
-                      <Text style={styles.content}>哈哈</Text>
                     </View>
                 </SubNavBar>
          </Layer>

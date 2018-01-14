@@ -27,7 +27,7 @@ namespace BuildingComment.Dto.Response
         public int ReplyNum { get; set; }
         
         public int LikeNum { get; set; }
-
-        public IEnumerable<CommentReply> CommentReplies { get; set; }
+        
+        public List<FileItemResponse> FileList { get; set; }
     }
 }

@@ -34,5 +34,7 @@ namespace BuildingComment.Dto.Request
         /// 是否匿名
         /// </summary>
         public bool IsAnonymous { get; set; }
+
+        public BuildingRequest Building { get; set; }
     }
 }

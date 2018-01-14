@@ -24,6 +24,8 @@ namespace BuildingComment.Controllers
     public class CommentController : BaseController<CommentController>
     {
         #region 成员
+
+        private readonly BuildingManager _buildingManager;
         private readonly CommentManager _commentManager;
         private readonly IMapper _mapper;
 
@@ -32,9 +34,12 @@ namespace BuildingComment.Controllers
         /// <summary>
         /// 评论控制器
         /// </summary>
-        public CommentController(CommentManager commentManager,
+        public CommentController(
+            BuildingManager buildingManager,
+            CommentManager commentManager,
              IMapper mapper)
         {
+            _buildingManager = buildingManager ?? throw new ArgumentNullException(nameof(buildingManager));
             _commentManager = commentManager ?? throw new ArgumentNullException(nameof(commentManager));
             _mapper = mapper;
         }
@@ -59,6 +64,7 @@ namespace BuildingComment.Controllers
             }
             try
             {
+                await _buildingManager.CreateAsync(commentRequest.Building, HttpContext.RequestAborted);
                 response.Extension = await _commentManager.CreateAsync(user.Id, commentRequest, HttpContext.RequestAborted);
             }
             catch (Exception e)
