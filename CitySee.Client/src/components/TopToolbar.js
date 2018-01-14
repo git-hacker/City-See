@@ -59,6 +59,7 @@ class TopToolbar extends Component {
                     <TabBar.Item 
                         iconStyle={{ width:30,height:30 }}
                         icon={require('../images/send2.png')}
+                        selectedIcon={require('../images/send2.png')}
                         selected={this.state.selectedTab === 'send'} onPress={() => this.changeTab('send')}>
                     </TabBar.Item>
                     <TabBar.Item title="关注"

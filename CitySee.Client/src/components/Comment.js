@@ -19,6 +19,10 @@ const styles = StyleSheet.create({
   text: {
     marginLeft: 10
   },
+  text2 : {
+    color: '#f94771',
+    marginLeft: 10
+  },
   line:{
     height:20,
     width:1,
@@ -34,13 +38,18 @@ class CommentPage extends Component {
   state = {
     isDz: false,
   }
+  handleDianZan = () => {
+    this.setState({
+      isDz: !this.state.isDz,
+    })
+  }
   render() {
       return (
         <View style={styles.comment}>
-            <View style={[styles.item]}>
+         <TouchableOpacity activeOpacity={0.7}  onPress={this.handleDianZan} style={[styles.item]}>
               <Image source={this.state.isDz ? dz2 : dz} style={{width: 22, height: 22}}/>
-              <Text style={styles.text}>123</Text>
-            </View>
+              <Text style={[this.state.isDz ? styles.text2 : styles.text]}>123</Text>
+        </TouchableOpacity>
             <View style={styles.line}></View>
             <View style={styles.item}>
               <Image source={pl} style={{width: 22, height: 22}}/>
