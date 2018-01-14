@@ -8,7 +8,7 @@ import { replace } from 'react-router-redux';
 import LayerStyles from './LayerStyle';
 import MapIndex from '../map'
 import IndexPage from '../pages/indexList/indexPage'
-import {getBuildList} from '../actions/index'
+// import {getBuildList} from '../actions/index'
 // import SendIndex from '../pages/sendMessage/send'
 import SendIndex from '../pages/sendMessage/send'
 import PersonIndex from '../pages/my'
@@ -30,7 +30,7 @@ class TopToolbar extends Component {
     }
 
     componentDidMount() {
-        this.props.getBuildList()
+        // this.props.getBuildList()
     }
 
     changeTab = (tab) => {
@@ -98,7 +98,7 @@ const mapStateToProps = (state, action) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         dispatch,
-        getBuildList: (...args) => dispatch(getBuildList(...args))
+        // getBuildList: (...args) => dispatch(getBuildList(...args))
     }
 }
 
