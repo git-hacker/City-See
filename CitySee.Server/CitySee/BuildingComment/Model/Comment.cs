@@ -69,11 +69,9 @@ namespace BuildingComment.Model
 
         [NotMapped]
         public string Icon { get; set; }
-
-        [NotMapped]
+      
         public int ReplyNum { get; set; }
-
-        [NotMapped]
+    
         public int LikeNum { get; set; }
 
         [NotMapped]

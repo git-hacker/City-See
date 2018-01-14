@@ -119,13 +119,13 @@ class HomePage extends Component {
     render() {
         const row = (rowData, sectionID, rowID) => {
             return <View style={style.main}>
-                <ListItem item={rowData} />
-                <Comment/>
-              </View>
+                      <ListItem item={rowData} />
+                      <Comment/>
+                   </View>
         }
         return (
             <View style={IndexPageStyles.content}>
-                <NavBar text={this.props.page === 'attention' ? '关注' : '眷城'}/>
+                <NavBar text={this.props.titleName === 'attention' ? '关注' : '眷城'}/>
                 <View style={{padding: 10, height: '100%'}}>
                     <ScrollView style={{height: 240, width: this.props.page === 'attention' ? '90%' : '100%'}} horizontal>
                     <View style={[IndexPageStyles.topBuilding]}>

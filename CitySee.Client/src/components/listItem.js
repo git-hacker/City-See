@@ -48,11 +48,11 @@ class ListItem extends Component {
                 <View style={styles.header}>
                     <Image style={styles.icon} source={{uri: rowData.icon}} />
                     <View style={styles.headerRight}>
-                        <Text style={{color: '#f94771'}}>{rowData.name}</Text>
+                        <Text style={{color: '#f94771', fontSize: 16}}>{rowData.name}</Text>
                         <View style={{display: 'flex', flexDirection: 'row'}}>
-                            <Text>{rowData.time}</Text>
-                            <Text style={{marginLeft: 10,marginRight: 8}}>来自</Text>
-                            <Text>{rowData.userName}</Text>
+                            <Text style={{fontSize: 12}}>{rowData.time}</Text>
+                            <Text style={{marginLeft: 10,marginRight: 8, fontSize: 12}}>来自</Text>
+                            <Text style={{fontSize: 12}}>{rowData.userName}</Text>
                         </View>
                     </View>
                 </View>

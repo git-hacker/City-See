@@ -6,7 +6,6 @@ using BuildingComment.Dto.Request;
 using BuildingComment.Dto.Response;
 using BuildingComment.Manager;
 using CitySee.Core;
-using CitySee.Core.Dto;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -21,7 +20,7 @@ namespace BuildingComment.Controllers
 {
     [Authorize(AuthenticationSchemes = OAuthValidationDefaults.AuthenticationScheme)]
     [Produces("application/json")]
-    [Route("api/comment")]
+    [Route("api/comments")]
     public class CommentController : BaseController<CommentController>
     {
         #region 成员
@@ -46,7 +45,7 @@ namespace BuildingComment.Controllers
         /// <param name="user"></param>
         /// <param name="commentRequest"></param>
         /// <returns></returns>
-        [HttpPost("addcomment")]
+        [HttpPost]
         [CheckPermission]
         public async Task<ResponseMessage<CommentResponse>> CreateComment(UserInfo user, [FromBody] CommentRequest commentRequest)
         {
@@ -77,7 +76,7 @@ namespace BuildingComment.Controllers
         /// <param name="user"></param>
         /// <param name="commentRequest"></param>
         /// <returns></returns>
-        [HttpPut("updatecomment")]
+        [HttpPut]
         [CheckPermission]
         public async Task<ResponseMessage> UpdateComment(UserInfo user, [FromBody] CommentRequest commentRequest)
         {
@@ -108,27 +107,27 @@ namespace BuildingComment.Controllers
         /// <param name="user"></param>
         /// <param name="ids"></param>
         /// <returns></returns>
-        [HttpDelete("updatecomment")]
+        [HttpDelete("{id}")]
         [CheckPermission]
-        public async Task<ResponseMessage> DeleteComment(UserInfo user, [FromBody] List<string> ids)
+        public async Task<ResponseMessage> DeleteComment(UserInfo user, [FromRoute] string id)
         {
             ResponseMessage<CommentResponse> response = new ResponseMessage<CommentResponse>();
-            if (ids == null)
+            if (string.IsNullOrEmpty(id))
             {
                 response.Code = ResponseCodeDefines.ModelStateInvalid;
                 response.Message = "数值不能为空";
-                Logger.LogWarning($"用户{user?.UserName ?? ""}({user?.Id ?? ""})删除评论(DeleteComment)模型验证失败：\r\n{response.Message ?? ""}，\r\n请求参数为：\r\n" + (ids != null ? JsonHelper.ToJson(ids) : ""));
+                Logger.LogWarning($"用户{user?.UserName ?? ""}({user?.Id ?? ""})删除评论(DeleteComment)模型验证失败：\r\n{response.Message ?? ""}，\r\n请求参数为：\r\n(id){id ?? ""}");
                 return response;
             }
             try
             {
-                await _commentManager.DeleteAsync(user.Id, ids, HttpContext.RequestAborted);
+                await _commentManager.DeleteAsync(user.Id, new List<string> { id }, HttpContext.RequestAborted);
             }
             catch (Exception e)
             {
                 response.Code = ResponseCodeDefines.ServiceError;
                 response.Message = e.Message;
-                Logger.LogError($"用户{user?.UserName ?? ""}({user?.Id ?? ""})删除评论(DeleteComment)请求失败：\r\n{response.Message ?? ""}，\r\n请求参数为：\r\n" + (ids != null ? JsonHelper.ToJson(ids) : ""));
+                Logger.LogError($"用户{user?.UserName ?? ""}({user?.Id ?? ""})删除评论(DeleteComment)请求失败：\r\n{response.Message ?? ""}，\r\n请求参数为：\r\n(id){id ?? ""}");
             }
             return response;
         }
@@ -139,11 +138,11 @@ namespace BuildingComment.Controllers
         /// <param name="user"></param>
         /// <param name="id">评论Id</param>
         /// <returns></returns>
-        [HttpPost("givelike/{id}")]
+        [HttpPut("like/{id}")]
         [CheckPermission]
-        public async Task<ResponseMessage> GiveLike(UserInfo user, [FromRoute] string id)
+        public async Task<ResponseMessage<bool>> GiveLike(UserInfo user, [FromRoute] string id)
         {
-            ResponseMessage<CommentResponse> response = new ResponseMessage<CommentResponse>();
+            ResponseMessage<bool> response = new ResponseMessage<bool>();
             if (!ModelState.IsValid)
             {
                 response.Code = ResponseCodeDefines.ModelStateInvalid;
@@ -154,7 +153,13 @@ namespace BuildingComment.Controllers
             try
             {
                 if (!await _commentManager.ValGiveLike(user.Id, id))
+                {
                     await _commentManager.CreateGiveLikeAsync(user.Id, id, HttpContext.RequestAborted);
+                }
+                else
+                {
+                    await _commentManager.CancelGiveLikeAsync(id, HttpContext.RequestAborted);
+                }
             }
             catch (Exception e)
             {
@@ -166,41 +171,20 @@ namespace BuildingComment.Controllers
         }
 
         /// <summary>
-        /// 取消点赞
+        /// 根据楼盘获取评论列表
         /// </summary>
         /// <param name="user"></param>
-        /// <param name="id">评论Id</param>
+        /// <param name="buildingid"></param>
+        /// <param name="condition"></param>
         /// <returns></returns>
-        [HttpDelete("cancelgivelike/{id}")]
+        [HttpPost("mylist")]
         [CheckPermission]
-        public async Task<ResponseMessage> CancelGiveLike(UserInfo user, [FromRoute] string id)
+        public async Task<PagingResponseMessage<CommentResponse>> GetListByUser(UserInfo user, [FromBody]PageCondition condition)
         {
-            ResponseMessage<CommentResponse> response = new ResponseMessage<CommentResponse>();
-            if (!ModelState.IsValid)
-            {
-                response.Code = ResponseCodeDefines.ModelStateInvalid;
-                response.Message = ModelState.GetAllErrors();
-                Logger.LogWarning($"用户{user?.UserName ?? ""}({user?.Id ?? ""})取消点赞(CancelGiveLike)模型验证失败：\r\n{response.Message ?? ""}，\r\n请求参数为：\r\n(id){id ?? ""}");
-                return response;
-            }
-            try
-            {
-                if (await _commentManager.ValGiveLike(user.Id, id))
-                    await _commentManager.CancelGiveLikeAsync(id, HttpContext.RequestAborted);
-                else
-                {
-                    response.Code = ResponseCodeDefines.NotAllow;
-                    response.Message = "你没有权限操作";
-                }
-            }
-            catch (Exception e)
-            {
-                response.Code = ResponseCodeDefines.ServiceError;
-                response.Message = e.Message;
-                Logger.LogError($"用户{user?.UserName ?? ""}({user?.Id ?? ""})取消点赞(CancelGiveLike)请求失败：\r\n{response.Message ?? ""}，\r\n请求参数为：\r\n(id){id ?? ""}");
-            }
+            var response = new PagingResponseMessage<CommentResponse>();
             return response;
         }
+
 
         /// <summary>
         /// 根据楼盘获取评论列表
@@ -241,7 +225,7 @@ namespace BuildingComment.Controllers
         /// <param name="id"></param>
         /// <param name="condition"></param>
         /// <returns></returns>
-        [HttpPost("listcomment/{id}")]
+        [HttpPost("commentlist/{id}")]
         [CheckPermission]
         public async Task<ResponseMessage<List<CommentDetailResponse>>> GetListById(UserInfo user, [FromRoute] string id, [FromBody]PageCondition condition)
         {
