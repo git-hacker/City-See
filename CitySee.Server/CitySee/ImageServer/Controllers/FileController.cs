@@ -5,6 +5,8 @@ using System.Text;
 using System.Linq;
 using System.Threading.Tasks;
 using CitySee.Core;
+using ImageMagick;
+using ImageServer.Dto;
 
 namespace ImageServer
 {
@@ -67,5 +69,9 @@ namespace ImageServer
             response.Extension = targetPath;
             return response;
         }
+
+        
+
+
     }
 }
