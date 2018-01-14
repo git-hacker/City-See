@@ -11,13 +11,7 @@ namespace BuildingComment.Help
     {
 
         public FilterHelper() { }
-
-        public FilterHelper(string dictionaryPath)
-        {
-            this.dictionaryPath = dictionaryPath;
-        }
-
-        private string dictionaryPath = string.Empty;
+        private string dictionaryPath =  System.IO.Path.Combine(AppContext.BaseDirectory, "sensitivewords.txt");
         /// <summary>  
         /// 词库路径  
         /// </summary>  
@@ -30,16 +24,6 @@ namespace BuildingComment.Help
         /// 内存词典  
         /// </summary>  
         private WordGroup[] MEMORYLEXICON = new WordGroup[(int)char.MaxValue];
-
-        private string sourctText = string.Empty;
-        /// <summary>  
-        /// 检测源  
-        /// </summary>  
-        public string SourctText
-        {
-            get { return sourctText; }
-            set { sourctText = value; }
-        }
 
         /// <summary>  
         /// 检测源游标  
@@ -175,10 +159,11 @@ namespace BuildingComment.Help
 
         /// <summary>  
         /// 检测  
-        /// </summary>  
+        /// </summary>
+        /// <param name="sourctText"></param>  
         /// <param name="blackWord"></param>  
         /// <returns></returns>  
-        private bool Check(string blackWord)
+        private bool Check(string sourctText, string blackWord)
         {
             wordlenght = 0;
             //检测源下一位游标  
@@ -233,23 +218,23 @@ namespace BuildingComment.Help
         /// <summary>  
         /// 查找并替换  
         /// </summary>  
-        /// <param name="replaceChar"></param>  
-        public string Filter(char replaceChar)
+        public string Filter(string sourctText)
         {
+            char replaceChar = '*';
             LoadDictionary();
             if (sourctText != string.Empty)
             {
                 char[] tempString = sourctText.ToCharArray();
-                for (int i = 0; i < SourctText.Length; i++)
+                for (int i = 0; i < sourctText.Length; i++)
                 {
                     //查询以该字为首字符的词组  
-                    WordGroup group = MEMORYLEXICON[(int)ToDBC(SourctText)[i]];
+                    WordGroup group = MEMORYLEXICON[(int)ToDBC(sourctText)[i]];
                     if (group != null)
                     {
                         for (int z = 0; z < group.Count(); z++)
                         {
                             string word = group.GetWord(z);
-                            if (word.Length == 0 || Check(word))
+                            if (word.Length == 0 || Check(sourctText,word))
                             {
                                 string blackword = string.Empty;
                                 for (int pos = 0; pos < wordlenght + 1; pos++)

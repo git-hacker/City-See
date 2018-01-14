@@ -105,7 +105,7 @@ namespace BuildingComment.Controllers
         /// 删除评论
         /// </summary>
         /// <param name="user"></param>
-        /// <param name="ids"></param>
+        /// <param name="id"></param>
         /// <returns></returns>
         [HttpDelete("{id}")]
         [CheckPermission]
@@ -121,7 +121,7 @@ namespace BuildingComment.Controllers
             }
             try
             {
-                await _commentManager.DeleteAsync(user.Id, new List<string> { id }, HttpContext.RequestAborted);
+                await _commentManager.DeleteAsync(user.Id, id, HttpContext.RequestAborted);
             }
             catch (Exception e)
             {
@@ -158,7 +158,7 @@ namespace BuildingComment.Controllers
                 }
                 else
                 {
-                    await _commentManager.CancelGiveLikeAsync(id, HttpContext.RequestAborted);
+                    await _commentManager.CancelGiveLikeAsync(user.Id, id, HttpContext.RequestAborted);
                 }
             }
             catch (Exception e)
@@ -171,10 +171,9 @@ namespace BuildingComment.Controllers
         }
 
         /// <summary>
-        /// 根据楼盘获取评论列表
+        /// 根据UserId获取评论列表
         /// </summary>
         /// <param name="user"></param>
-        /// <param name="buildingid"></param>
         /// <param name="condition"></param>
         /// <returns></returns>
         [HttpPost("mylist")]
@@ -182,70 +181,22 @@ namespace BuildingComment.Controllers
         public async Task<PagingResponseMessage<CommentResponse>> GetListByUser(UserInfo user, [FromBody]PageCondition condition)
         {
             var response = new PagingResponseMessage<CommentResponse>();
-            return response;
-        }
-
-
-        /// <summary>
-        /// 根据楼盘获取评论列表
-        /// </summary>
-        /// <param name="user"></param>
-        /// <param name="buildingid"></param>
-        /// <param name="condition"></param>
-        /// <returns></returns>
-        [HttpPost("list/{buildingid}")]
-        [CheckPermission]
-        public async Task<PagingResponseMessage<CommentResponse>> GetListByBuildingId(UserInfo user, [FromRoute] string buildingid, [FromBody]PageCondition condition)
-        {
-            var response = new PagingResponseMessage<CommentResponse>();
-            if (!ModelState.IsValid && string.IsNullOrEmpty(buildingid))
+            if (!ModelState.IsValid)
             {
                 response.Code = ResponseCodeDefines.ModelStateInvalid;
                 response.Message = ModelState.GetAllErrors();
-                Logger.LogWarning($"用户{user?.UserName ?? ""}({user?.Id ?? ""})根据楼盘获取评论列表(GetListByBuildingId)模型验证失败：\r\n{response.Message ?? ""}，\r\n请求参数为：\r\n(buildingid){buildingid ?? ""}，\r\n请求参数为：\r\n" + (condition != null ? JsonHelper.ToJson(condition) : ""));
+                Logger.LogWarning($"用户{user?.UserName ?? ""}({user?.Id ?? ""})根据UserId获取评论列表(GetListByUser)模型验证失败：\r\n{response.Message ?? ""}，\r\n请求参数为：\r\n" + (condition != null ? JsonHelper.ToJson(condition) : ""));
                 return response;
             }
             try
             {
-                response = await _commentManager.ListByBuildingIdAsync(buildingid, condition, HttpContext.RequestAborted);
+                response = await _commentManager.ListByUserIdAsync(user.Id, condition, HttpContext.RequestAborted);
             }
             catch (Exception e)
             {
                 response.Code = ResponseCodeDefines.ServiceError;
                 response.Message = e.Message;
-                Logger.LogError($"用户{user?.UserName ?? ""}({user?.Id ?? ""})根据楼盘获取评论列表(GetListByBuildingId)请求失败：\r\n{response.Message ?? ""}，\r\n请求参数为：\r\n(buildingid){buildingid ?? ""}，\r\n请求参数为：\r\n" + (condition != null ? JsonHelper.ToJson(condition) : ""));
-            }
-            return response;
-        }
-
-        /// <summary>
-        /// 根据评论ID获取评论列表
-        /// </summary>
-        /// <param name="user"></param>
-        /// <param name="id"></param>
-        /// <param name="condition"></param>
-        /// <returns></returns>
-        [HttpPost("commentlist/{id}")]
-        [CheckPermission]
-        public async Task<ResponseMessage<List<CommentDetailResponse>>> GetListById(UserInfo user, [FromRoute] string id, [FromBody]PageCondition condition)
-        {
-            var response = new ResponseMessage<List<CommentDetailResponse>>();
-            if (!ModelState.IsValid && string.IsNullOrEmpty(id))
-            {
-                response.Code = ResponseCodeDefines.ModelStateInvalid;
-                response.Message = ModelState.GetAllErrors();
-                Logger.LogWarning($"用户{user?.UserName ?? ""}({user?.Id ?? ""})根据评论ID获取评论列表(GetListById)模型验证失败：\r\n{response.Message ?? ""}，\r\n请求参数为：\r\n(id){id ?? ""}，\r\n请求参数为：\r\n" + (condition != null ? JsonHelper.ToJson(condition) : ""));
-                return response;
-            }
-            try
-            {
-                response.Extension = await _commentManager.ListByIdAsync(id, condition, HttpContext.RequestAborted);
-            }
-            catch (Exception e)
-            {
-                response.Code = ResponseCodeDefines.ServiceError;
-                response.Message = e.Message;
-                Logger.LogError($"用户{user?.UserName ?? ""}({user?.Id ?? ""})根据评论ID获取评论列表(GetListById)请求失败：\r\n{response.Message ?? ""}，\r\n请求参数为：\r\n(id){id ?? ""}，\r\n请求参数为：\r\n" + (condition != null ? JsonHelper.ToJson(condition) : ""));
+                Logger.LogError($"用户{user?.UserName ?? ""}({user?.Id ?? ""})根据UserId获取评论列表(GetListByUser)请求失败：\r\n{response.Message ?? ""}，\r\n请求参数为：\r\n" + (condition != null ? JsonHelper.ToJson(condition) : ""));
             }
             return response;
         }

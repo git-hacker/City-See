@@ -12,14 +12,23 @@ namespace BuildingComment
     {
         public CommentMappingProfile()
         {
-            CreateMap<CommentDetailResponse, Comment>();
-            CreateMap<Comment, CommentDetailResponse>();
+            CreateMap<CommentDetailResponse, CommentReply>();
+            CreateMap<CommentReply, CommentDetailResponse>();
+
+            CreateMap<CommentReplyRequest, CommentReply>();
+            CreateMap<CommentReply, CommentReplyRequest>();
 
             CreateMap<CommentResponse, Comment>();
             CreateMap<Comment, CommentResponse>();
 
             CreateMap<CommentRequest, Comment>();
             CreateMap<Comment, CommentRequest>();
+
+            CreateMap<BuildingResponse, Building>();
+            CreateMap<Building, BuildingResponse>();
+
+            CreateMap<BuildingRequest, Building>();
+            CreateMap<Building, BuildingRequest>();
         }
 
     }

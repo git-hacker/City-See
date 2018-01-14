@@ -1,6 +1,7 @@
 import React, { Component, Children } from 'react'
 import { View, ScrollView, StyleSheet } from 'react-native'
 import LayerStyles from './LayerStyle';
+import {goBack} from 'react-router-redux'
 import Spinner from './Spinner'
 
 export class LayerRouter extends Component {
@@ -46,7 +47,7 @@ class Layer extends Component {
 
     render() {
         const [router, ...children] = this.filterChildren();
-
+        console.log(children)
         return (
             <View style={LayerStyles.tarBar}>
                 <View style={[LayerStyles.scrollPanel, this.props.style]}>

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BuildingComment.Model;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
@@ -26,5 +27,7 @@ namespace BuildingComment.Dto.Response
         public int ReplyNum { get; set; }
         
         public int LikeNum { get; set; }
+
+        public IEnumerable<CommentReply> CommentReplies { get; set; }
     }
 }

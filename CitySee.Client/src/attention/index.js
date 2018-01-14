@@ -5,6 +5,7 @@ import { connect } from 'react-redux'
 import { replace } from 'react-router-redux';
 import NavBar from '../components/NavBar'
 import AttentionItem from '../components/attentionItem'
+import Layer, {LayerRouter} from '../components/Layer';
 
 const style = StyleSheet.create(
     {
@@ -113,26 +114,27 @@ class HomePage extends Component {
             return <AttentionItem item={rowData} />
         }
         return (
-            <View>
-                <NavBar titleName='我的关注'/>
-                <View style={{padding: 10, height: '100%'}}>
-                    <ListView
-                        ref={el => this.lv = el}
-                        onScroll={() => { console.log('scroll') }}
-                        scrollRenderAheadDistance={500}
-                        onEndReached={this.onEndReached}
-                        onEndReachedThreshold={10}
-                        style={{height: 1000}}
-                        renderFooter={() => (<View style={{ padding: 30, display: 'flex', justifyContent:'center', alignItems: 'center' }}>
-                            <Text>{this.state.loading ? '正在获取数据...' : ''}</Text>
-                        </View>)}
-                        dataSource={this.state.dataSource}
-                        renderRow={row}
-                    >
-                    </ListView>
+            <Layer>
+                <View>
+                    <NavBar titleName='我的关注'/>
+                    <View style={{padding: 10, height: '100%'}}>
+                        <ListView
+                            ref={el => this.lv = el}
+                            onScroll={() => { console.log('scroll') }}
+                            scrollRenderAheadDistance={500}
+                            onEndReached={this.onEndReached}
+                            onEndReachedThreshold={10}
+                            style={{height: 1000}}
+                            renderFooter={() => (<View style={{ padding: 30, display: 'flex', justifyContent:'center', alignItems: 'center' }}>
+                                <Text>{this.state.loading ? '正在获取数据...' : ''}</Text>
+                            </View>)}
+                            dataSource={this.state.dataSource}
+                            renderRow={row}
+                        >
+                        </ListView>
+                    </View>
                 </View>
-            </View>
- 
+            </Layer>
         )
     }
 }

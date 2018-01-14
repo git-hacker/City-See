@@ -10,10 +10,10 @@ namespace BuildingComment.Store
 {
     public interface IGiveLikeStore
     {
-        Task<GiveLike> CreateAsync(GiveLike giveLike, CancellationToken cancellationToken = default(CancellationToken));
+        Task<GiveLike> CreateAsync(GiveLike giveLike,Comment comment, CancellationToken cancellationToken = default(CancellationToken));
 
         Task<TResult> GetAsync<TResult>(Func<IQueryable<GiveLike>, IQueryable<TResult>> query, CancellationToken cancellationToken = default(CancellationToken));
 
-        Task DeleteAsync(GiveLike giveLike, CancellationToken cancellationToken = default(CancellationToken));
+        Task DeleteAsync(GiveLike giveLike, Comment comment, CancellationToken cancellationToken = default(CancellationToken));
     }
 }

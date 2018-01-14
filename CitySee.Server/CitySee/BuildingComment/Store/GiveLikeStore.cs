@@ -18,13 +18,16 @@ namespace BuildingComment.Store
             Context = buildingCommentDbContext;
         }
 
-        public async Task<GiveLike> CreateAsync(GiveLike giveLike, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<GiveLike> CreateAsync(GiveLike giveLike,Comment comment, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (giveLike == null)
             {
                 throw new ArgumentNullException(nameof(giveLike));
             }
             Context.Add(giveLike);
+            Context.Attach(comment);
+            var entry = Context.Entry(comment);
+            entry.Property(x => x.LikeNum).IsModified = true;
             await Context.SaveChangesAsync(cancellationToken);
             return giveLike;
         }
@@ -45,13 +48,16 @@ namespace BuildingComment.Store
             return query.Invoke(Context.GiveLikes.AsNoTracking()).SingleOrDefaultAsync(cancellationToken);
         }
 
-        public async Task DeleteAsync(GiveLike giveLike, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task DeleteAsync(GiveLike giveLike, Comment comment, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (giveLike == null)
             {
                 throw new ArgumentNullException(nameof(giveLike));
             }
             Context.Remove(giveLike);
+            Context.Attach(comment);
+            var entry = Context.Entry(comment);
+            entry.Property(x => x.LikeNum).IsModified = true;
             try
             {
                 await Context.SaveChangesAsync(cancellationToken);
