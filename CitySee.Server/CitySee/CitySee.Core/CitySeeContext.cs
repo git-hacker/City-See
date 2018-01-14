@@ -25,6 +25,8 @@ namespace CitySee.Core
 
         public string ConnectionString { get; set; }
 
+        public string FileServerRoot { get; set; }
+
         public CitySeeContext(IServiceCollection serviceContainer)
         {
             Current = this;

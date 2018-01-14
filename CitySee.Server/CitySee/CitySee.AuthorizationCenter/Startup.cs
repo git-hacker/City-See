@@ -4,6 +4,7 @@ using CitySee.AuthorizationCenter.Model;
 using CitySee.Core;
 using CitySee.Core.Plugin;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
@@ -99,6 +100,7 @@ namespace CitySee.AuthorizationCenter
             citySeeContext.PluginConfigStorage = new DefaultPluginConfigStorage();
             citySeeContext.PluginFactory = new DefaultPluginFactory();
             citySeeContext.ConnectionString = configuration["Data:DefaultConnection:ConnectionString"];
+            citySeeContext.FileServerRoot = configuration["FileServerRoot"];
 
             var environment = services.FirstOrDefault(x => x.ServiceType == typeof(IHostingEnvironment))?.ImplementationInstance;
             var apppart = services.FirstOrDefault(x => x.ServiceType == typeof(ApplicationPartManager))?.ImplementationInstance;
@@ -113,14 +115,14 @@ namespace CitySee.AuthorizationCenter
             }
             bool InitIsOk = citySeeContext.Init().Result;
             services.AddUserDefined();
-            
+
             services.AddAutoMapper();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            loggerFactory.AddDebug();
+            //loggerFactory.AddDebug();
             if (env.IsDevelopment())
             {
                 //开发环境下，日志文件输出到控制台（在VS中的输出中查看）
@@ -141,24 +143,12 @@ namespace CitySee.AuthorizationCenter
                 options.AllowAnyOrigin();
                 options.AllowCredentials();
             });
-            app.Use(async (context, next) =>
-            {
-                if (context.Request.Headers.ContainsKey("X-Forwarded-Proto"))
-                {
-                    //如果存在SLB，且包含原始请求协议，将请求协议重写为原始协议
-                    string proto = context.Request.Headers["X-Forwarded-Proto"].FirstOrDefault();
-                    if (!String.IsNullOrEmpty(proto))
-                    {
-                        context.Request.Scheme = proto;
-                    }
-                }
-                await next();
-            });
+
             app.UseStaticFiles();
 
             app.UseMvcWithDefaultRoute();
 
-            citySeeContext.Provider = app.ApplicationServices;
+            //citySeeContext.Provider = app.ApplicationServices;
             InitializeAsync(app.ApplicationServices, CancellationToken.None).GetAwaiter().GetResult();
         }
 
@@ -166,8 +156,8 @@ namespace CitySee.AuthorizationCenter
         {
             using (var scope = services.GetRequiredService<IServiceScopeFactory>().CreateScope())
             {
-                //var context = scope.ServiceProvider.GetRequiredService<CitySeeDbContext>();
-                //await context.Database.EnsureCreatedAsync();
+                var context = scope.ServiceProvider.GetRequiredService<CitySeeDbContext>();
+                await context.Database.EnsureCreatedAsync();
 
                 var applicationmanager = scope.ServiceProvider.GetRequiredService<OpenIddict.Core.OpenIddictApplicationManager<OpenIddictApplication>>();
                 var usermanager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();

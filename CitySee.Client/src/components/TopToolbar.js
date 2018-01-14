@@ -10,7 +10,8 @@ import MapIndex from '../map'
 import IndexPage from '../pages/indexList/indexPage'
 import {getBuildList} from '../actions/index'
 // import SendIndex from '../pages/sendMessage/send'
-
+import SendIndex from '../pages/sendMessage/send'
+import PersonIndex from '../pages/my'
 let sbHeight = StatusBar.currentHeight;
 if (Platform.OS === 'android' && (Platform.Version * 1) <= 20) {
     sbHeight = 0;
@@ -63,7 +64,7 @@ class TopToolbar extends Component {
                         icon={require('../images/send2.png')}
                         selectedIcon={require('../images/send2.png')}
                         selected={this.state.selectedTab === 'send'} onPress={() => this.changeTab('send')}>
-                        {/* <SendIndex actived={this.state.selectedTab === 'send'} match={this.props.match}/> */}
+                        <SendIndex actived={this.state.selectedTab === 'send'} match={this.props.match}/>
                     </TabBar.Item>
                     <TabBar.Item title="关注"
                         iconStyle={{width:25,height:25}}
@@ -77,6 +78,7 @@ class TopToolbar extends Component {
                         icon={require('../images/person.png')}
                         selectedIcon={require('../images/person2.png')}
                         selected={this.state.selectedTab === 'my'} onPress={() => this.changeTab('my')}>
+                        <PersonIndex actived={this.state.selectedTab === 'my'} match={this.props.match}/>
                     </TabBar.Item>
                 </TabBar>
 </View>

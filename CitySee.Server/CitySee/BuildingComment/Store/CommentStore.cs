@@ -37,7 +37,24 @@ namespace BuildingComment.Store
                             BuildingName = b.BuildingName,
                             ReplyNum = cm.ReplyNum,
                             LikeNum = cm.LikeNum,
-                            UserName = cm.IsAnonymous ? "匿名用户" : c.UserName
+                            UserName = cm.IsAnonymous ? "匿名用户" : c.UserName,
+                            CommentFileInfo = from f1 in Context.FileInfos.AsNoTracking()
+                                             join file in Context.CommentImages.AsNoTracking() on f1.FileGuid equals file.FileGuid
+                                             orderby file.CreateTime descending
+                                             where file.CommentId == cm.Id
+                                             select new FileInfo
+                                             {
+                                                 FileGuid = f1.FileGuid,
+                                                 FileExt = f1.FileExt,
+                                                 Uri = f1.Uri,
+                                                 Name = f1.Name,
+                                                 Type = f1.Type,
+                                                 Size = f1.Size,
+                                                 Height = f1.Height,
+                                                 Width = f1.Width,
+                                                 Ext1 = f1.Ext1,
+                                                 Ext2 = f1.Ext2
+                                             }
                         };
             return query;
         }
