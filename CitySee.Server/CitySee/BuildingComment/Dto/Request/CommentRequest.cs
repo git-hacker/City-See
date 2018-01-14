@@ -20,18 +20,6 @@ namespace BuildingComment.Dto.Request
         public string BuildingId { get; set; }
 
         /// <summary>
-        /// 评论上级Id
-        /// </summary>
-        [StringLength(127, ErrorMessage = "上层回复ID超出长度限制")]
-        public string UpId { get; set; }
-
-        /// <summary>
-        /// 回复人ID
-        /// </summary>
-        [StringLength(127, ErrorMessage = "回复人ID超出长度限制")]
-        public string ToCustomerId { get; set; }
-
-        /// <summary>
         /// 评论人Id
         /// </summary>
         [StringLength(127, ErrorMessage = "用户ID超出长度限制")]

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -23,24 +24,6 @@ namespace BuildingComment.Model
         public string BuildingId { get; set; }
 
         /// <summary>
-        /// 评论顶级Id
-        /// </summary>
-        [MaxLength(127)]
-        public string FirstId { get; set; }
-
-        /// <summary>
-        /// 回复人ID
-        /// </summary>
-        [MaxLength(127)]
-        public string ToCustomerId { get; set; }
-
-        /// <summary>
-        /// 评论上级Id
-        /// </summary>
-        [MaxLength(127)]
-        public string UpId { get; set; }
-
-        /// <summary>
         /// 评论人Id
         /// </summary>
         [MaxLength(127)]
@@ -60,7 +43,17 @@ namespace BuildingComment.Model
         /// 创建日期
         /// </summary>
         public DateTime CreateTime { get; set; }
-        
+
+        /// <summary>
+        /// 回复数量
+        /// </summary>
+        public int ReplyNum { get; set; }
+
+        /// <summary>
+        /// 点赞数量
+        /// </summary>
+        public int LikeNum { get; set; }
+
         [NotMapped]
         public string BuildingName { get; set; }
 
@@ -69,13 +62,9 @@ namespace BuildingComment.Model
 
         [NotMapped]
         public string Icon { get; set; }
-      
-        public int ReplyNum { get; set; }
-    
-        public int LikeNum { get; set; }
 
         [NotMapped]
-        public string ToUserName { get; set; }
+        public IEnumerable<CommentReply> CommentReplies { get; set; }
         
     }
 }
