@@ -27,6 +27,10 @@ namespace BuildingComment
             context.Services.AddScoped<CommentManager>();
             context.Services.AddScoped<ICommentStore, CommentStore>();
             context.Services.AddScoped<Store.IGiveLikeStore, GiveLikeStore>();
+            context.Services.AddScoped<CommentReplyManager>();
+            context.Services.AddScoped<ICommentReplyStore, CommentReplyStore>();
+            context.Services.AddScoped<BuildingManager>();
+            context.Services.AddScoped<IBuildingStore, BuildingStore>();
             return Task.FromResult(new ResponseMessage());
         }
 
