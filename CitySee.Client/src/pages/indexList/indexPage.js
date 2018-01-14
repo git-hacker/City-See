@@ -105,13 +105,13 @@ class HomePage extends Component {
     render() {
         const row = (rowData, sectionID, rowID) => {
             return <View style={style.main}>
-                <ListItem item={rowData} />
-                <Comment/>
-              </View>
+                      <ListItem item={rowData} />
+                      <Comment/>
+                   </View>
         }
         return (
             <View style={IndexPageStyles.content}>
-                <NavBar/>
+                <NavBar titleName='眷城'/>
                 <View style={{padding: 10, height: '100%'}}>
                     <ScrollView style={{height: 240}} horizontal>
                     <View style={IndexPageStyles.topBuilding}>
