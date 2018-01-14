@@ -8,6 +8,17 @@ import NavBar from '../../components/NavBar'
 import ProjectItem from '../../components/ProjectItem'
 import TabBar from '../../components/TopToolbar'
 import ListItem from '../../components/listItem'
+import Comment from '../../components/Comment'
+
+const style = StyleSheet.create({
+  main: {
+    // padding: 5,
+    marginBottom: 10,
+    borderStyle: 'solid',
+    borderBottomColor: '#e5e5e5',
+    borderBottomWidth: 1
+}
+})
 
 class HomePage extends Component {
 
@@ -93,7 +104,10 @@ class HomePage extends Component {
    
     render() {
         const row = (rowData, sectionID, rowID) => {
-            return <ListItem item={rowData} />
+            return <View style={style.main}>
+                <ListItem item={rowData} />
+                <Comment/>
+              </View>
         }
         return (
             <View style={IndexPageStyles.content}>

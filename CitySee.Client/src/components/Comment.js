@@ -16,13 +16,13 @@ const styles = StyleSheet.create({
     paddingTop: 8,
     paddingBottom: 8
   },
-  leftItem: {
-    borderRightWidth: 1,
-    borderStyle: 'solid',
-    borderRightColor: '#dcdcdc',
-  },
   text: {
     marginLeft: 10
+  },
+  line:{
+    height:20,
+    width:1,
+    backgroundColor: '#999'
   }
 })
 const dz = require('../images/dz.png')
@@ -37,10 +37,11 @@ class CommentPage extends Component {
   render() {
       return (
         <View style={styles.comment}>
-            <View style={[styles.item, styles.leftItem]}>
+            <View style={[styles.item]}>
               <Image source={this.state.isDz ? dz2 : dz} style={{width: 22, height: 22}}/>
               <Text style={styles.text}>123</Text>
             </View>
+            <View style={styles.line}></View>
             <View style={styles.item}>
               <Image source={pl} style={{width: 22, height: 22}}/>
               <Text style={styles.text} >233</Text>
