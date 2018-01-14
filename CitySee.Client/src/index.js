@@ -136,7 +136,7 @@ class IndexPage extends Component {
 
         <ConnectedRouter history={history}>
           <Layer>
-            <Route exact path='/' component={HomePage} />
+            <Route exact path='/' component={Toolbar} />
             <Route path={'/RegisterPage'} component={RegisterPage} />
             <Route path={'/ForgetPwdPage'} component={ForgetPwdPage} />
             <Route path={'/LoginPage'} component={LoginPage} />
