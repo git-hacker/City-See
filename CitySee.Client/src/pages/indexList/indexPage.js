@@ -13,7 +13,8 @@ import {Route} from 'react-router';
 import {goBack} from 'react-router-redux'
 import {push} from 'react-router-redux';
 import Layer, {LayerRouter} from '../../components/Layer';
-import Attention from '../../attention'
+// import Attention from '../../attention'
+
 
 const style = StyleSheet.create(
     {
@@ -179,9 +180,9 @@ class HomePage extends Component {
                         </ListView>
                     </View>
                 </View>
-                <LayerRouter>
+                {/* <LayerRouter>
                     <Route path={this.getPath('Attention')} component={Attention} />
-                </LayerRouter>
+                </LayerRouter> */}
             </Layer>
         )
     }
